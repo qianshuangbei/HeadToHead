@@ -1,0 +1,143 @@
+<!--pages/match/upload-singles.wxml-->
+<view class="container">
+  <view class="form-container">
+    <view class="form-title">上传单打比赛</view>
+
+    <!-- 对手选择 -->
+    <view class="form-group">
+      <label class="form-label">对手</label>
+      <picker
+        bindchange="onOpponentChange"
+        value="{{selectedOpponentIndex}}"
+        range="{{opponents}}"
+        range-key="nickname"
+      >
+        <view class="picker">
+          {{selectedOpponent ? selectedOpponent.nickname : '选择对手'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 比分输入 -->
+    <view class="form-group">
+      <label class="form-label">比分</label>
+
+      <!-- 第一盘 -->
+      <view class="set-group">
+        <text class="set-label">第一盘</text>
+        <view class="score-input">
+          <input
+            type="number"
+            placeholder="6"
+            value="{{score.set1.player_a}}"
+            bindinput="onSet1PlayerAInput"
+            max="7"
+          />
+          <text class="separator">-</text>
+          <input
+            type="number"
+            placeholder="4"
+            value="{{score.set1.player_b}}"
+            bindinput="onSet1PlayerBInput"
+            max="7"
+          />
+        </view>
+      </view>
+
+      <!-- 第二盘 -->
+      <view class="set-group">
+        <text class="set-label">第二盘</text>
+        <view class="score-input">
+          <input
+            type="number"
+            placeholder="7"
+            value="{{score.set2.player_a}}"
+            bindinput="onSet2PlayerAInput"
+            max="7"
+          />
+          <text class="separator">-</text>
+          <input
+            type="number"
+            placeholder="5"
+            value="{{score.set2.player_b}}"
+            bindinput="onSet2PlayerBInput"
+            max="7"
+          />
+        </view>
+      </view>
+
+      <!-- 第三盘 (可选) -->
+      <view class="set-group">
+        <text class="set-label">第三盘 (可选)</text>
+        <view class="score-input">
+          <input
+            type="number"
+            placeholder="0"
+            value="{{score.set3.player_a}}"
+            bindinput="onSet3PlayerAInput"
+            max="7"
+          />
+          <text class="separator">-</text>
+          <input
+            type="number"
+            placeholder="0"
+            value="{{score.set3.player_b}}"
+            bindinput="onSet3PlayerBInput"
+            max="7"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 比赛日期 -->
+    <view class="form-group">
+      <label class="form-label">比赛日期</label>
+      <picker mode="date" value="{{matchDate}}" bindchange="onDateChange">
+        <view class="picker">
+          {{matchDate || '选择日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 标签 (可选) -->
+    <view class="form-group">
+      <label class="form-label">标签 (可选)</label>
+      <view class="tags">
+        <text
+          class="tag {{tags.includes('ACE') ? 'active' : ''}}"
+          bindtap="toggleTag"
+          data-tag="ACE"
+        >
+          ACE
+        </text>
+        <text
+          class="tag {{tags.includes('破发') ? 'active' : ''}}"
+          bindtap="toggleTag"
+          data-tag="破发"
+        >
+          破发
+        </text>
+        <text
+          class="tag {{tags.includes('反转') ? 'active' : ''}}"
+          bindtap="toggleTag"
+          data-tag="反转"
+        >
+          反转
+        </text>
+      </view>
+    </view>
+
+    <!-- 信息提示 -->
+    <view class="info-box">
+      <text>💡 上传后对手需确认才能进入排名。请确保比分信息准确。</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="button-group">
+      <button class="btn btn-primary" bindtap="handleUpload" disabled="{{loading}}">
+        {{loading ? '上传中...' : '上传比赛'}}
+      </button>
+      <button class="btn btn-secondary" bindtap="handleCancel">取消</button>
+    </view>
+  </view>
+</view>

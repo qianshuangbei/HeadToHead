@@ -1,0 +1,76 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/auth/login",
+    "pages/auth/profile-setup",
+    "pages/group/list",
+    "pages/group/detail",
+    "pages/group/create",
+    "pages/group/join",
+    "pages/match/upload-singles",
+    "pages/match/upload-doubles",
+    "pages/match/review",
+    "pages/match/history",
+    "pages/profile/index",
+    "pages/ranking/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "HeadToHead - 网球排名",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "selectedColor": "#1AAD19",
+    "color": "#999999",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/group/list",
+        "iconPath": "assets/icons/group.png",
+        "selectedIconPath": "assets/icons/group-active.png",
+        "text": "Group"
+      },
+      {
+        "pagePath": "pages/match/history",
+        "iconPath": "assets/icons/match.png",
+        "selectedIconPath": "assets/icons/match-active.png",
+        "text": "比赛"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "cloud": true,
+  "permission": {
+    "scope.userInfo": {
+      "desc": "获取您的昵称和头像用于显示身份信息"
+    },
+    "scope.userLocation": {
+      "desc": "获取您的位置用于更好的服务"
+    }
+  },
+  "plugins": {
+    "WechatSI": {
+      "version": "0.3.5",
+      "provider": "wx069ba97219f725f0"
+    }
+  },
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
+  "sitemapLocation": "sitemap.json"
+}
