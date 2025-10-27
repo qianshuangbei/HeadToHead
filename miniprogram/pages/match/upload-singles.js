@@ -35,7 +35,7 @@ Page({
     const app = getApp();
     api.getGroupDetail(this.data.groupId)
       .then(group => {
-        // 过滤掉自己
+        // Filter out self
         const opponents = group.members.filter(m => m.user_id !== app.globalData.openid);
         this.setData({
           opponents,
@@ -43,7 +43,7 @@ Page({
         });
       })
       .catch(err => {
-        console.error('加载对手失败:', err);
+        console.error('Failed to load opponents:', err);
       });
   },
 
@@ -56,7 +56,7 @@ Page({
         }
       })
       .catch(err => {
-        console.error('加载赛季失败:', err);
+        console.error('Failed to load season:', err);
       });
   },
 
@@ -111,7 +111,7 @@ Page({
   },
 
   handleUpload() {
-    // 验证
+    // Validation
     if (!this.data.selectedOpponent) {
       wx.showToast({ title: '请选择对手', icon: 'error' });
       return;
@@ -157,7 +157,7 @@ Page({
         }, 500);
       })
       .catch(err => {
-        console.error('上传失败:', err);
+        console.error('Failed to upload match:', err);
         wx.showToast({
           title: '上传失败',
           icon: 'error'

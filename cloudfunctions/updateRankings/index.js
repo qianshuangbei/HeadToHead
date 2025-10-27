@@ -1,7 +1,7 @@
 /**
- * 云函数: 计算排名
- * 每30分钟执行一次，计算所有活跃赛季的排名
- * 触发方式: 定时触发或手动调用
+ * Cloud Function: Calculate Rankings
+ * Executes every 30 minutes to calculate rankings for all active seasons
+ * Triggers: Scheduled trigger or manual invocation
  */
 
 const cloud = require('wx-server-sdk');
@@ -9,7 +9,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
 /**
- * 计算最近5场胜率
+ * Calculate win rate from recent 5 matches
  */
 const getRecent5WinRate = (recentMatches) => {
   if (recentMatches.length === 0) return 0;
@@ -18,11 +18,11 @@ const getRecent5WinRate = (recentMatches) => {
 };
 
 /**
- * 主函数
+ * Main function
  */
 exports.main = async (event, context) => {
   try {
-    // 1. 获取所有活跃赛季
+    // 1. Fetch all active seasons
     const seasonResult = await db.collection('seasons')
       .where({
         status: db.command.in(['pending', 'active', 'ended'])
@@ -30,12 +30,12 @@ exports.main = async (event, context) => {
       .get();
 
     const seasons = seasonResult.data;
-    console.log(`发现 ${seasons.length} 个赛季需要更新排名`);
+    console.log(`[Rankings] Found ${seasons.length} seasons requiring ranking updates`);
 
     for (const season of seasons) {
-      console.log(`\n开始计算赛季 ${season.season_name} (${season._id}) 的排名`);
+      console.log(`\n[Rankings] Starting to calculate rankings for season "${season.season_name}" (${season._id})`);
 
-      // 2. 获取该赛季所有approved的比赛
+      // 2. Fetch all approved matches for this season
       const matchResult = await db.collection('matches')
         .where({
           season_id: season._id,
@@ -44,9 +44,9 @@ exports.main = async (event, context) => {
         .get();
 
       const matches = matchResult.data;
-      console.log(`该赛季共有 ${matches.length} 场approved的比赛`);
+      console.log(`[Rankings] Season has ${matches.length} approved matches`);
 
-      // 3. 获取该赛季所有成员(从group_members中获取)
+      // 3. Fetch all members for this season (from group_members)
       const memberResult = await db.collection('group_members')
         .where({
           group_id: season.group_id,
@@ -55,9 +55,9 @@ exports.main = async (event, context) => {
         .get();
 
       const members = memberResult.data;
-      console.log(`该Group共有 ${members.length} 个成员`);
+      console.log(`[Rankings] Group has ${members.length} active members`);
 
-      // 4. 初始化玩家统计对象
+      // 4. Initialize player statistics object
       const playerStats = {};
       members.forEach(m => {
         playerStats[m.user_id] = {
@@ -68,7 +68,7 @@ exports.main = async (event, context) => {
         };
       });
 
-      // 5. 遍历所有比赛，统计胜负
+      // 5. Iterate through all matches and calculate win/loss records
       matches.forEach(match => {
         if (match.match_type === 'singles') {
           const winner = match.winning_player_id;
@@ -83,7 +83,7 @@ exports.main = async (event, context) => {
             playerStats[loser].matches.push({ winner: false, matchId: match._id, createdAt: match.created_at });
           }
         } else if (match.match_type === 'doubles') {
-          // 双打: 赢的4个人都加1分
+          // Doubles: All 4 players on winning team get 1 point
           if (match.winning_team === 'team_a') {
             if (playerStats[match.team_a.player1]) playerStats[match.team_a.player1].wins++;
             if (playerStats[match.team_a.player2]) playerStats[match.team_a.player2].wins++;
@@ -98,10 +98,10 @@ exports.main = async (event, context) => {
         }
       });
 
-      // 6. 按规则排序: 胜场数 > 最近5场胜率 > 加入时间
+      // 6. Sort by rules: wins > recent 5-match win rate > join time
       const ranked = Object.entries(playerStats)
         .map(([userId, stats]) => {
-          // 计算最近5场
+          // Calculate recent 5 matches
           const recent5Matches = stats.matches.slice(-5);
           const recent5Wins = recent5Matches.filter(m => m.winner).length;
 
@@ -117,20 +117,20 @@ exports.main = async (event, context) => {
           };
         })
         .sort((a, b) => {
-          // Primary: 胜场数
+          // Primary: Total wins
           if (a.wins !== b.wins) return b.wins - a.wins;
-          // Secondary: 最近5场胜率
+          // Secondary: Recent 5-match win rate
           if (a.recent5Rate !== b.recent5Rate) return b.recent5Rate - a.recent5Rate;
-          // Tertiary: 加入时间
+          // Tertiary: Join time
           return a.joinedAt - b.joinedAt;
         });
 
-      // 7. 删除旧的排名记录
+      // 7. Delete old ranking records
       await db.collection('season_rankings')
         .where({ season_id: season._id })
         .remove();
 
-      // 8. 批量添加新排名
+      // 8. Batch insert new rankings
       for (let i = 0; i < ranked.length; i++) {
         const player = ranked[i];
         await db.collection('season_rankings').add({
@@ -146,7 +146,7 @@ exports.main = async (event, context) => {
         });
       }
 
-      console.log(`赛季 ${season.season_name} 排名更新完成，共 ${ranked.length} 个玩家`);
+      console.log(`[Rankings] Season "${season.season_name}" ranking update completed with ${ranked.length} players`);
     }
 
     return {
@@ -155,7 +155,7 @@ exports.main = async (event, context) => {
       processedSeasons: seasons.length
     };
   } catch (error) {
-    console.error('排名计算失败:', error);
+    console.error('[Rankings] Ranking calculation failed:', error);
     return {
       code: -1,
       message: '排名计算失败',

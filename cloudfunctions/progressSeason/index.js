@@ -1,8 +1,8 @@
 /**
- * 云函数: 赛季自动推进
- * 每天凌晨2点执行，自动推进赛季状态
- * pending -> active (当到达开始时间)
- * active -> ended (当到达结束时间)
+ * Cloud Function: Season Auto-Progression
+ * Executes daily at 2 AM to auto-progress season status
+ * pending -> active (when start time is reached)
+ * active -> ended (when end time is reached)
  */
 
 const cloud = require('wx-server-sdk');
@@ -12,7 +12,7 @@ const db = cloud.database();
 exports.main = async (event, context) => {
   try {
     const now = Date.now();
-    console.log(`[赛季推进] 执行时间: ${new Date(now).toLocaleString()}`);
+    console.log(`[Season Progression] Execution time: ${new Date(now).toLocaleString()}`);
 
     // 1. pending -> active
     const pendingResult = await db.collection('seasons')
@@ -27,7 +27,7 @@ exports.main = async (event, context) => {
         status: 'active',
         updated_at: now
       });
-      console.log(`[赛季推进] 赛季 ${season.season_name} 从 pending 切换到 active`);
+      console.log(`[Season Progression] Season "${season.season_name}" transitioned from pending to active`);
     }
 
     // 2. active -> ended
@@ -43,7 +43,7 @@ exports.main = async (event, context) => {
         status: 'ended',
         updated_at: now
       });
-      console.log(`[赛季推进] 赛季 ${season.season_name} 从 active 切换到 ended`);
+      console.log(`[Season Progression] Season "${season.season_name}" transitioned from active to ended`);
 
       // 自动计算赛季奖项
       await calculateSeasonAwards(season._id);
@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
       activeToEnded: activeResult.data.length
     };
   } catch (error) {
-    console.error('[赛季推进] 错误:', error);
+    console.error('[Season Progression] Error:', error);
     return {
       code: -1,
       message: '赛季推进失败',
@@ -66,7 +66,7 @@ exports.main = async (event, context) => {
 };
 
 /**
- * 计算赛季奖项
+ * Calculate Season Awards
  */
 async function calculateSeasonAwards(seasonId) {
   try {
@@ -77,15 +77,15 @@ async function calculateSeasonAwards(seasonId) {
       .get();
 
     if (rankings.data.length === 0) {
-      console.log(`赛季 ${seasonId} 无排名数据，无法计算奖项`);
+      console.log(`[Awards] Season ${seasonId} has no ranking data, skipping award calculation`);
       return;
     }
 
-    // 1. MVP: 积分(胜场数)最高
+    // 1. MVP: Highest score (most wins)
     const mvp = rankings.data[0];
     await addSeasonAward(seasonId, 'mvp', mvp.user_id, mvp.wins);
 
-    // 2. 最佳战绩: 胜率最高(至少5场比赛)
+    // 2. Best Record: Highest win rate (at least 5 matches)
     const qualified = rankings.data.filter(r => r.match_count >= 5);
     if (qualified.length > 0) {
       const bestRecord = qualified.reduce((a, b) =>
@@ -94,27 +94,27 @@ async function calculateSeasonAwards(seasonId) {
       await addSeasonAward(seasonId, 'best_record', bestRecord.user_id, bestRecord.win_rate);
     }
 
-    // 3. 最活跃: 参赛场数最多
+    // 3. Most Active: Most matches played
     const mostActive = rankings.data.reduce((a, b) =>
       (a.match_count || 0) > (b.match_count || 0) ? a : b
     );
     await addSeasonAward(seasonId, 'most_active', mostActive.user_id, mostActive.match_count);
 
-    // 4. 进步最快: 积分增长最多
-    // (这里简化处理，实际应该比较赛季开始和结束的排名)
+    // 4. Fastest Progress: Most wins
+    // (Simplified calculation - ideally should compare season start and end rankings)
     const fastestProgress = rankings.data.reduce((a, b) =>
       (a.wins || 0) > (b.wins || 0) ? a : b
     );
     await addSeasonAward(seasonId, 'fastest_progress', fastestProgress.user_id, fastestProgress.wins);
 
-    console.log(`赛季 ${seasonId} 奖项计算完成`);
+    console.log(`[Awards] Season ${seasonId} award calculation completed`);
   } catch (error) {
-    console.error(`计算赛季奖项失败:`, error);
+    console.error(`[Awards] Failed to calculate season awards:`, error);
   }
 }
 
 /**
- * 添加赛季奖项
+ * Add Season Award
  */
 async function addSeasonAward(seasonId, awardType, winnerId, awardValue) {
   await db.collection('season_awards').add({

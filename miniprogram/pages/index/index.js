@@ -18,7 +18,7 @@ Page({
     }
   },
 
-  // 检查登录状态
+  // Check login status
   checkLoginStatus() {
     const app = getApp();
     if (app.globalData.isLoggedIn && app.globalData.openid) {
@@ -28,16 +28,16 @@ Page({
     }
   },
 
-  // 处理登录
+  // Handle login
   handleLogin() {
     const self = this;
     wx.getUserProfile({
-      desc: '获取您的头像和昵称用于显示身份',
+      desc: 'Get your avatar and nickname to display your identity',
       success: (res) => {
         const userInfo = res.userInfo;
         const app = getApp();
 
-        // 保存用户信息
+        // Save user info
         api.getUserOrCreate(app.globalData.openid, userInfo).then(() => {
           self.setData({
             isLoggedIn: true,
@@ -50,7 +50,7 @@ Page({
             icon: 'success'
           });
         }).catch(err => {
-          console.error('登录失败:', err);
+          console.error('Login failed:', err);
           wx.showToast({
             title: '登录失败',
             icon: 'error'
@@ -58,12 +58,12 @@ Page({
         });
       },
       fail: err => {
-        console.log('用户拒绝授权:', err);
+        console.log('User denied authorization:', err);
       }
     });
   },
 
-  // 加载用户信息
+  // Load user info
   loadUserInfo() {
     const app = getApp();
     const db = api.initCloudBase();
@@ -75,15 +75,15 @@ Page({
         }
       })
       .catch(err => {
-        console.error('加载用户信息失败:', err);
+        console.error('Failed to load user info:', err);
       });
   },
 
-  // 加载Group列表
+  // Load groups list
   loadGroups() {
     const app = getApp();
 
-    wx.showLoading({ title: '加载中...' });
+    wx.showLoading({ title: 'Loading...' });
 
     api.getUserGroups(app.globalData.openid)
       .then(groups => {
@@ -91,7 +91,7 @@ Page({
         wx.hideLoading();
       })
       .catch(err => {
-        console.error('加载Group失败:', err);
+        console.error('Failed to load groups:', err);
         wx.hideLoading();
         wx.showToast({
           title: '加载失败',
@@ -100,21 +100,21 @@ Page({
       });
   },
 
-  // 处理创建Group
+  // Handle group creation
   handleCreateGroup() {
     wx.navigateTo({
       url: '/pages/group/create'
     });
   },
 
-  // 处理加入Group
+  // Handle group join
   handleJoinGroup() {
     wx.navigateTo({
       url: '/pages/group/join'
     });
   },
 
-  // 选择Group进入详情
+  // Select group to enter details
   handleSelectGroup(e) {
     const groupId = e.currentTarget.dataset.groupId;
     wx.navigateTo({

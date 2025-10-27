@@ -26,14 +26,14 @@ Page({
     this.loadMatches();
   },
 
-  // 加载Group详情
+  // Load group details
   loadGroupDetail() {
     api.getGroupDetail(this.data.groupId)
       .then(group => {
         this.setData({ group });
       })
       .catch(err => {
-        console.error('加载Group详情失败:', err);
+        console.error('Failed to load group details:', err);
         wx.showToast({
           title: '加载失败',
           icon: 'error'
@@ -41,7 +41,7 @@ Page({
       });
   },
 
-  // 加载赛季
+  // Load seasons
   loadSeasons() {
     api.getGroupSeasons(this.data.groupId)
       .then(seasons => {
@@ -54,18 +54,18 @@ Page({
         }
       })
       .catch(err => {
-        console.error('加载赛季失败:', err);
+        console.error('Failed to load seasons:', err);
       });
   },
 
-  // 加载排名
+  // Load rankings
   loadRankings() {
     const currentSeason = this.data.seasons[this.data.currentSeasonIndex];
     if (!currentSeason) return;
 
     api.getSeasonRankings(currentSeason._id)
       .then(rankings => {
-        // 补充玩家名称
+        // Enrich with player names
         const db = api.initCloudBase();
         const userIds = rankings.map(r => r.user_id);
 
@@ -76,25 +76,25 @@ Page({
             const users = res.data;
             const rankingsWithNames = rankings.map(r => ({
               ...r,
-              playerName: users.find(u => u._id === r.user_id)?.nickname || '未知玩家'
+              playerName: users.find(u => u._id === r.user_id)?.nickname || 'Unknown Player'
             }));
             this.setData({ rankings: rankingsWithNames });
           });
       })
       .catch(err => {
-        console.error('加载排名失败:', err);
+        console.error('Failed to load rankings:', err);
       });
   },
 
-  // 加载比赛
+  // Load matches
   loadMatches() {
     const app = getApp();
     const db = api.initCloudBase();
 
-    // 获取待审核比赛
+    // Fetch pending matches for review
     api.getPendingMatches(app.globalData.openid, this.data.groupId)
       .then(matches => {
-        // 补充对手信息
+        // Enrich with opponent names
         const opponentIds = matches.map(m => m.player_a_id);
         return db.collection('users')
           .where({ _id: db.command.in(opponentIds) })
@@ -103,16 +103,16 @@ Page({
             const users = res.data;
             const matchesWithNames = matches.map(m => ({
               ...m,
-              opponentName: users.find(u => u._id === m.player_a_id)?.nickname || '未知玩家'
+              opponentName: users.find(u => u._id === m.player_a_id)?.nickname || 'Unknown Player'
             }));
             this.setData({ pendingMatches: matchesWithNames });
           });
       })
       .catch(err => {
-        console.error('加载待审核比赛失败:', err);
+        console.error('Failed to load pending matches:', err);
       });
 
-    // 获取最近比赛
+    // Fetch recent matches
     db.collection('matches')
       .where({
         group_id: this.data.groupId,
@@ -125,23 +125,23 @@ Page({
         this.setData({ recentMatches: res.data });
       })
       .catch(err => {
-        console.error('加载最近比赛失败:', err);
+        console.error('Failed to load recent matches:', err);
       });
   },
 
-  // 切换标签
+  // Switch tabs
   switchTab(e) {
     this.setData({ activeTab: e.currentTarget.dataset.tab });
   },
 
-  // 赛季切换
+  // Season selector
   onSeasonChange(e) {
     const index = parseInt(e.detail.value);
     this.setData({ currentSeasonIndex: index });
     this.loadRankings();
   },
 
-  // 复制分享码
+  // Copy access code
   copyAccessCode() {
     wx.setClipboardData({
       data: this.data.group.access_code,
@@ -154,7 +154,7 @@ Page({
     });
   },
 
-  // 审核比赛
+  // Approve match
   approveMatch(e) {
     const matchId = e.currentTarget.dataset.matchId;
     const app = getApp();
@@ -169,7 +169,7 @@ Page({
         this.loadRankings();
       })
       .catch(err => {
-        console.error('审核失败:', err);
+        console.error('Failed to approve match:', err);
         wx.showToast({
           title: err.message || '审核失败',
           icon: 'error'
@@ -177,7 +177,7 @@ Page({
       });
   },
 
-  // 拒绝比赛
+  // Reject match
   rejectMatch(e) {
     const matchId = e.currentTarget.dataset.matchId;
     const app = getApp();
@@ -191,25 +191,25 @@ Page({
         this.loadMatches();
       })
       .catch(err => {
-        console.error('拒绝失败:', err);
+        console.error('Failed to reject match:', err);
       });
   },
 
-  // 上传单打
+  // Upload singles match
   handleUploadSingles() {
     wx.navigateTo({
       url: `/pages/match/upload-singles?groupId=${this.data.groupId}`
     });
   },
 
-  // 上传双打
+  // Upload doubles match
   handleUploadDoubles() {
     wx.navigateTo({
       url: `/pages/match/upload-doubles?groupId=${this.data.groupId}`
     });
   },
 
-  // 退出Group
+  // Leave group
   handleLeaveGroup() {
     wx.showModal({
       title: '确认退出',
@@ -229,7 +229,7 @@ Page({
   }
 });
 
-// 自定义过滤器
+// Format win rate percentage
 Page.prototype.formatRate = function(value) {
   if (!value) return '0%';
   return (value * 100).toFixed(1) + '%';

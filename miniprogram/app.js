@@ -1,16 +1,48 @@
 App({
   onLaunch: function () {
     if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力');
+      console.error('Please use WeChat base library 2.2.3 or above to enable cloud capabilities');
     } else {
       wx.cloud.init({
-        env: 'your-env-id', // 需要替换为你的环境ID
+        env: 'cloud1-4ggxyig7879ad3fb', // Replace with your environment ID
         traceUser: true,
       });
     }
 
-    // 检查登录状态
+    // Initialize language based on WeChat system settings
+    this.initializeLanguage();
+
+    // Check login status
     this.checkLogin();
+  },
+
+  /**
+   * Initialize application language based on user's WeChat system settings
+   * Detects language from wx.getSystemInfoSync() and sets i18n accordingly
+   */
+  initializeLanguage: function() {
+    try {
+      const i18n = require('./utils/i18n.js');
+      const systemInfo = wx.getSystemInfoSync();
+
+      // Get system language code (e.g., 'zh', 'en', 'zh-Hans', 'en-US', etc.)
+      const systemLanguage = systemInfo.language || 'en';
+      console.log('[Language] System language detected:', systemLanguage);
+
+      // Determine language: Chinese (zh-*) or English (everything else)
+      let selectedLanguage = 'en'; // Default to English
+      if (systemLanguage.startsWith('zh')) {
+        selectedLanguage = 'zh';
+      }
+
+      i18n.setLanguage(selectedLanguage);
+      this.globalData.language = selectedLanguage;
+      console.log('[Language] App language set to:', selectedLanguage);
+    } catch (error) {
+      console.error('[Language] Failed to initialize language:', error);
+      // Fallback: default to English
+      this.globalData.language = 'en';
+    }
   },
 
   checkLogin: function() {
@@ -19,12 +51,12 @@ App({
       name: 'login',
       data: {},
       success: res => {
-        console.log('[云函数] 登录成功，用户openid: ', res.result.openid);
+        console.log('[Cloud Function] Login successful, user openid:', res.result.openid);
         self.globalData.openid = res.result.openid;
         self.globalData.isLoggedIn = true;
       },
       fail: err => {
-        console.error('[云函数] 登录失败', err);
+        console.error('[Cloud Function] Login failed', err);
         self.globalData.isLoggedIn = false;
       }
     });
@@ -35,5 +67,6 @@ App({
     userInfo: null,
     isLoggedIn: false,
     currentGroup: null,
+    language: 'en', // Will be set by initializeLanguage()
   }
 });

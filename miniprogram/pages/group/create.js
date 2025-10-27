@@ -15,9 +15,9 @@ Page({
   },
 
   onLoad() {
-    // 设置默认日期
+    // Set default dates
     const today = new Date();
-    const endDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000); // 3个月后
+    const endDate = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000); // 3 months later
 
     this.setData({
       'formData.startDate': this.formatDate(today),
@@ -59,7 +59,7 @@ Page({
   handleCreate() {
     const form = this.data.formData;
 
-    // 验证
+    // Validation
     if (!form.name.trim()) {
       wx.showToast({
         title: '请输入Group名称',
@@ -93,10 +93,10 @@ Page({
       season_enabled: form.seasonEnabled
     };
 
-    // 创建Group
+    // Create group
     api.createGroup(app.globalData.openid, groupData)
       .then(group => {
-        // 如果启用赛季，则创建赛季
+        // If season enabled, create season
         if (form.seasonEnabled) {
           const startTime = new Date(form.startDate).getTime();
           const endTime = new Date(form.endDate).getTime();
@@ -123,7 +123,7 @@ Page({
         }, 500);
       })
       .catch(err => {
-        console.error('创建失败:', err);
+        console.error('Failed to create group:', err);
         wx.showToast({
           title: '创建失败',
           icon: 'error'

@@ -50,7 +50,7 @@ Page({
         }, 500);
       })
       .catch(err => {
-        console.error('加入失败:', err);
+        console.error('Failed to join group:', err);
         wx.showToast({
           title: err.message || '加入失败',
           icon: 'error'
@@ -65,9 +65,9 @@ Page({
     wx.scanCode({
       onlyFromCamera: true,
       success: (res) => {
-        // 如果扫到二维码，提取分享码
+        // If QR code is scanned, extract access code
         const result = res.result;
-        // 假设二维码中包含分享码，例如: ABC123
+        // Assumes QR code contains access code, e.g: ABC123
         this.setData({ accessCode: result.substring(0, 6).toUpperCase() });
       }
     });
