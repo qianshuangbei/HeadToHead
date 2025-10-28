@@ -21,44 +21,38 @@ const initCloudBase = () => {
 // 获取或创建用户
 const getUserOrCreate = async (openid, userInfo) => {
   const db = initCloudBase();
-  
-  await db.collection('users').where({
-    _openid: openid
-  }).get({
-    success: function(res)
-    {
-      console.log("Success find openid")
-      return res.data
-    },
-  })
 
-  const now = Date.now();
-    const newUser = {
-      _id: openid,
-      nickname: userInfo.nickName || '未命名用户', // 原始微信昵称或占位
-      avatar: userInfo.avatarUrl || '', // 原始微信头像或占位
-      display_nickname: userInfo.nickName || '未命名用户', // 用于展示，可后续自定义
-      display_avatar: userInfo.avatarUrl || '', // 用于展示，可后续自定义
-      completed_profile: false, // 首次创建默认未完成个性化选择
-      phone: '',
-      bio: '',
-      first_login_at: now,
+  // 查询是否已有用户
+  const queryRes = await db.collection('users').where({ _openid: openid }).get();
+  if (queryRes.data && queryRes.data.length > 0) {
+    const existingUser = queryRes.data[0];
+    const now = Date.now();
+    // 更新登录时间（不覆盖其它字段）
+    await db.collection('users').doc(existingUser._id).update({
       last_login_at: now,
-      created_at: now,
       updated_at: now,
-    };
+    });
+    return { ...existingUser, last_login_at: now, updated_at: now };
+  }
 
-  await db.collection('users').add({
-    _id: openid,
-    _openid: openid,
-    data: {
-      newUser
-    },
-    success: function(res){
-      console.log(res)
-    }
-  })
-  return newUser;
+  // 未找到则创建
+  const now = Date.now();
+  const newUser = {
+    nickname: userInfo.nickName || '未命名用户',
+    avatar: userInfo.avatarUrl || '',
+    display_nickname: userInfo.nickName || '未命名用户',
+    display_avatar: userInfo.avatarUrl || '',
+    completed_profile: false,
+    phone: '',
+    bio: '',
+    first_login_at: now,
+    last_login_at: now,
+    created_at: now,
+    updated_at: now,
+  };
+
+  const addRes = await db.collection('users').add(newUser);
+  return { ...newUser, _id: addRes._id };
 };
 
 // 更新用户信息
