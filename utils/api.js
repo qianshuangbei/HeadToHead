@@ -25,14 +25,7 @@ const getUserOrCreate = async (openid, userInfo) => {
   // 查询是否已有用户
   const queryRes = await db.collection('users').where({ _openid: openid }).get();
   if (queryRes.data && queryRes.data.length > 0) {
-    const existingUser = queryRes.data[0];
-    const now = Date.now();
-    // 更新登录时间（不覆盖其它字段）
-    await db.collection('users').doc(existingUser._id).update({
-      last_login_at: now,
-      updated_at: now,
-    });
-    return { ...existingUser, last_login_at: now, updated_at: now };
+    return queryRes.data;
   }
 
   // 未找到则创建
@@ -51,8 +44,9 @@ const getUserOrCreate = async (openid, userInfo) => {
     updated_at: now,
   };
 
-  const addRes = await db.collection('users').add(newUser);
-  return { ...newUser, _id: addRes._id };
+  const addRes = await db.collection('users').add({
+    data:{newUser}});
+  return newUser;
 };
 
 // 更新用户信息
