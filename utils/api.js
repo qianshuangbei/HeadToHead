@@ -1,8 +1,8 @@
 /**
  * CloudBase 初始化和API封装
- * 所有数据库操作统一在这里处理
+ * 类型与构造在 utils/models.js
  */
-
+const { buildUser, buildGroup } = require('./models.js');
 let db = null;
 
 const initCloudBase = () => {
@@ -30,6 +30,8 @@ const updateDoc = async (collectionName, docId, partial) => {
   return db.collection(collectionName).doc(docId).update({ data: partial });
 };
 
+// 使用外部 buildUser / buildGroup (见 models.js)
+
 // 获取或创建用户
 const getUserOrCreate = async (openid, userInfo) => {
   const db = initCloudBase();
@@ -41,20 +43,7 @@ const getUserOrCreate = async (openid, userInfo) => {
   }
 
   // 未找到则创建
-  const now = Date.now();
-  const newUser = {
-    nickname: userInfo.nickName || '未命名用户',
-    avatar: userInfo.avatarUrl || '',
-    display_nickname: userInfo.nickName || '未命名用户',
-    display_avatar: userInfo.avatarUrl || '',
-    completed_profile: false,
-    phone: '',
-    bio: '',
-    first_login_at: now,
-    last_login_at: now,
-    created_at: now,
-    updated_at: now,
-  };
+  const newUser = buildUser(userInfo.nickName, userInfo.avatarUrl);
 
   const addRes = await addDoc('users', newUser);
   return { ...newUser, _id: addRes._id };
@@ -87,21 +76,13 @@ const generateAccessCode = () => {
 const createGroup = async (creatorId, groupData) => {
   const db = initCloudBase();
 
-  const newGroup = {
-    name: groupData.name,
-    description: groupData.description || '',
-    creator_id: creatorId,
-    access_code: generateAccessCode(),
-    member_count: 1,
-    season_enabled: groupData.season_enabled || false,
-    current_season_id: '',
-    rules: {
-      match_type: ['singles', 'doubles'],
-      points_system: 'simple_count'
-    },
-    created_at: Date.now(),
-    updated_at: Date.now(),
-  };
+  const newGroup = buildGroup(
+    groupData.name,
+    groupData.description,
+    creatorId,
+    groupData.season_enabled,
+    generateAccessCode()
+  );
 
   const result = await addDoc('groups', newGroup);
 
@@ -413,6 +394,7 @@ const getGroupSeasons = async (groupId) => {
 
   return result.data;
 };
+
 
 module.exports = {
   initCloudBase,
