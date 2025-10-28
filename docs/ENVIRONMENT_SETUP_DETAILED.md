@@ -302,12 +302,18 @@ cloudfunctions/
 2. 点击函数名进入详情
 3. 找到 **"触发器"** 或 **"配置"** 标签
 4. 点击 **"新建触发器"** 或 **"添加定时触发"**
-5. 设置参数:
-   ```
-   类型: 定时触发
-   触发周期: 自定义
-   Cron表达式: */30 * * * *
-   说明: 排名计算，每30分钟执行一次
+5. Set parameters:
+   ```json
+   {
+     "triggers": [
+       {
+         "type": "timer",
+         "triggerCycle": "custom",
+         "cronExpression": "*/30 * * * *",
+         "description": "Calculate rankings, execute every 30 minutes"
+       }
+     ]
+   }
    ```
 6. 保存
 
@@ -316,13 +322,19 @@ cloudfunctions/
 1. 云函数列表 → 找到 `progressSeason`
 2. 点击函数名进入详情
 3. 点击 **"新建触发器"**
-4. 设置参数:
-   ```
-   类型: 定时触发
-   触发周期: 每天
-   执行时间: 02:00:00 (凌晨2点)
-   或用Cron: 0 2 * * *
-   说明: 赛季自动推进
+4. Set parameters:
+   ```json
+   {
+     "triggers": [
+       {
+         "type": "timer",
+         "triggerCycle": "daily",
+         "executionTime": "02:00:00",
+         "cronExpression": "0 2 * * *",
+         "description": "Auto-progress season status"
+       }
+     ]
+   }
    ```
 5. 保存
 
