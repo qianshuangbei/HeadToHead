@@ -32,7 +32,7 @@ Page({
   handleLogin() {
     const self = this;
     wx.getUserProfile({
-      desc: 'Get your avatar and nickname to display your identity',
+      desc: '获取头像和昵称',
       success: (res) => {
         const userInfo = res.userInfo;
         const app = getApp();

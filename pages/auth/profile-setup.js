@@ -13,7 +13,7 @@ Page({
   chooseWeChatProfile() {
     this.setData({ mode: 'wechat', error: '' });
     wx.getUserProfile({
-      desc: '获取头像和昵称用于展示身份',
+      desc: '获取头像和昵称',
       success: (res) => {
         const userInfo = res.userInfo;
         this.setData({ nickname: userInfo.nickName, avatarTempPath: userInfo.avatarUrl, step: 'editing' });

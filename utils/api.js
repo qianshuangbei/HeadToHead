@@ -21,16 +21,18 @@ const initCloudBase = () => {
 // 获取或创建用户
 const getUserOrCreate = async (openid, userInfo) => {
   const db = initCloudBase();
+  
+  await db.collection('users').where({
+    _openid: openid
+  }).get({
+    success: function(res)
+    {
+      console.log("Success find openid")
+      return res.data
+    },
+  })
 
-  // 尝试获取用户
-  const result = await db.collection('users').doc(openid).get();
-
-  if (result.data) {
-    // 用户已存在，返回
-    return result.data;
-  } else {
-    // 新用户，创建
-    const now = Date.now();
+  const now = Date.now();
     const newUser = {
       _id: openid,
       nickname: userInfo.nickName || '未命名用户', // 原始微信昵称或占位
@@ -46,9 +48,17 @@ const getUserOrCreate = async (openid, userInfo) => {
       updated_at: now,
     };
 
-    await db.collection('users').doc(openid).set(newUser);
-    return newUser;
-  }
+  await db.collection('users').add({
+    _id: openid,
+    _openid: openid,
+    data: {
+      newUser
+    },
+    success: function(res){
+      console.log(res)
+    }
+  })
+  return newUser;
 };
 
 // 更新用户信息
