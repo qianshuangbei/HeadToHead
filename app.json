@@ -1,0 +1,64 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/auth/login",
+    "pages/auth/profile-setup",
+    "pages/group/list",
+    "pages/group/detail",
+    "pages/group/create",
+    "pages/group/join",
+    "pages/match/upload-singles",
+    "pages/match/upload-doubles",
+    "pages/match/review",
+    "pages/match/history",
+    "pages/profile/index",
+    "pages/ranking/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "HeadToHead",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "selectedColor": "#1AAD19",
+    "color": "#999999",
+    "list": [
+      {
+        "pagePath": "pages/group/list",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
+        "text": "Group"
+      },
+      {
+        "pagePath": "pages/challenge/index",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
+        "text": "约战"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
+        "text": "Me"
+      }
+    ]
+  },
+  "cloud": true,
+  "permission": {
+    "scope.userInfo": {
+      "desc": "获取您的昵称和头像用于显示身份信息"
+    },
+    "scope.userLocation": {
+      "desc": "获取您的位置用于更好的服务"
+    }
+  },
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
+  "sitemapLocation": "sitemap.json"
+}

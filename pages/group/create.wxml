@@ -1,0 +1,31 @@
+<!--pages/group/create.wxml-->
+<view class="container">
+  <view class="form-container">
+    <view class="form-title">创建新Group</view>
+
+    <!-- Group名称 -->
+    <view class="form-group">
+      <label class="form-label">Group名称</label>
+      <input
+        class="form-input"
+        placeholder="例: 朝阳网球俱乐部"
+        value="{{formData.name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+
+    <!-- 信息提示 -->
+    <view class="info-box">
+      <text>💡 Group创建后会自动生成6位分享码，成员可通过分享码加入。</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="button-group">
+      <button class="btn btn-primary" bindtap="handleCreate" disabled="{{loading}}">
+        {{loading ? '创建中...' : '创建Group'}}
+      </button>
+      <button class="btn btn-secondary" bindtap="handleCancel">取消</button>
+    </view>
+  </view>
+</view>

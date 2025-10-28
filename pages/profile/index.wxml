@@ -1,0 +1,24 @@
+<!--pages/profile/index.wxml-->
+<view class="profile-container">
+  <block wx:if="{{loading}}">
+    <text>加载中...</text>
+  </block>
+  <block wx:elif="{{user}}">
+    <image wx:if="{{user.display_avatar}}" class="avatar" src="{{user.display_avatar}}" mode="aspectFill" />
+    <text class="nickname">{{user.display_nickname}}</text>
+    <text class="status">{{user.completed_profile ? '资料已完成' : '资料未完成'}}</text>
+    <view class="extra">
+      <text wx:if="{{user.handedness}}">持拍手: {{user.handedness === 'left' ? '左手' : '右手'}}</text>
+      <text wx:if="{{user.racket_primary}}">主力球拍: {{user.racket_primary}}</text>
+      <view class="tags" wx:if="{{user.tags && user.tags.length}}">
+        <block wx:for="{{user.tags}}" wx:key="index">
+          <text class="tag">{{item}}</text>
+        </block>
+      </view>
+    </view>
+    <button size="mini" bindtap="goEditProfile">修改资料</button>
+  </block>
+  <block wx:else>
+    <text>未获取到用户信息</text>
+  </block>
+</view>

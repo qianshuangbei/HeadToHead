@@ -1,0 +1,122 @@
+<!--pages/group/detail.wxml-->
+<view class="container">
+  <!-- Group信息头 -->
+  <view class="group-header">
+    <view class="group-title">
+      <text class="name">{{group.name}}</text>
+      <text class="member-count">{{group.member_count}}个成员</text>
+    </view>
+    <view class="share-code">
+      <text>分享码: {{group.access_code}}</text>
+      <button class="btn-copy" bindtap="copyAccessCode">复制</button>
+    </view>
+  </view>
+
+  <!-- 标签栏 -->
+  <view class="tabs">
+    <view class="tab {{activeTab === 'ranking' ? 'active' : ''}}" bindtap="switchTab" data-tab="ranking">
+      排名
+    </view>
+    <view class="tab {{activeTab === 'matches' ? 'active' : ''}}" bindtap="switchTab" data-tab="matches">
+      比赛
+    </view>
+    <view class="tab {{activeTab === 'members' ? 'active' : ''}}" bindtap="switchTab" data-tab="members">
+      成员
+    </view>
+  </view>
+
+  <!-- 排名标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'ranking'}}">
+    <!-- 赛季选择器 -->
+    <view class="season-selector" wx:if="{{seasons.length > 0}}">
+      <picker bindchange="onSeasonChange" value="{{currentSeasonIndex}}" range="{{seasons}}" range-key="season_name">
+        <view class="picker">
+          <text>当前赛季: {{seasons[currentSeasonIndex].season_name}}</text>
+          <text class="status {{seasons[currentSeasonIndex].status}}">{{seasons[currentSeasonIndex].status}}</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 排名表 -->
+    <view class="ranking-table" wx:if="{{rankings.length > 0}}">
+      <view class="ranking-header">
+        <text class="col-rank">排名</text>
+        <text class="col-player">选手</text>
+        <text class="col-wins">胜</text>
+        <text class="col-rate">胜率</text>
+      </view>
+      <view class="ranking-row" wx:for="{{rankings}}" wx:key="user_id">
+        <text class="col-rank">{{item.rank}}</text>
+        <text class="col-player">{{item.playerName}}</text>
+        <text class="col-wins">{{item.wins}}</text>
+        <text class="col-rate">{{item.win_rate | formatRate}}</text>
+      </view>
+    </view>
+
+    <!-- 排名空状态 -->
+    <view class="empty-state" wx:else>
+      <text>暂无排名数据</text>
+      <text>上传比赛后排名将实时更新</text>
+    </view>
+  </view>
+
+  <!-- 比赛标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'matches'}}">
+    <view class="action-buttons">
+      <button class="btn btn-primary" bindtap="handleUploadSingles">上传单打</button>
+      <button class="btn btn-primary" bindtap="handleUploadDoubles">上传双打</button>
+    </view>
+
+    <!-- 待审核比赛 -->
+    <view class="pending-section" wx:if="{{pendingMatches.length > 0}}">
+      <text class="section-title">待我审核 ({{pendingMatches.length}})</text>
+      <view class="match-card" wx:for="{{pendingMatches}}" wx:key="_id">
+        <view class="match-info">
+          <text class="opponent">{{item.opponentName}}</text>
+          <text class="score">{{item.score.set1.player_a}}-{{item.score.set1.player_b}}</text>
+        </view>
+        <view class="match-actions">
+          <button class="btn-approve" bindtap="approveMatch" data-match-id="{{item._id}}">确认</button>
+          <button class="btn-reject" bindtap="rejectMatch" data-match-id="{{item._id}}">拒绝</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近比赛 -->
+    <view class="recent-section" wx:if="{{recentMatches.length > 0}}">
+      <text class="section-title">最近比赛</text>
+      <view class="match-card" wx:for="{{recentMatches}}" wx:key="_id">
+        <view class="match-info">
+          <text class="opponent">{{item.opponentName}}</text>
+          <text class="score">{{item.score.set1.player_a}}-{{item.score.set1.player_b}}</text>
+        </view>
+        <text class="status {{item.status}}">{{item.status}}</text>
+      </view>
+    </view>
+
+    <!-- 比赛空状态 -->
+    <view class="empty-state" wx:else>
+      <text>暂无比赛</text>
+      <button class="btn-empty" bindtap="handleUploadSingles">上传第一场比赛</button>
+    </view>
+  </view>
+
+  <!-- 成员标签页 -->
+  <view class="tab-content" wx:if="{{activeTab === 'members'}}">
+    <view class="members-list">
+      <view class="member-item" wx:for="{{group.members}}" wx:key="user_id">
+        <image class="avatar" src="{{item.userInfo.avatar}}" mode="aspectFill"></image>
+        <view class="member-info">
+          <text class="name">{{item.userInfo.nickname}}</text>
+          <text class="role">{{item.role === 'creator' ? '创建者' : '成员'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions">
+    <button class="btn btn-primary" wx:if="{{group.creator_id === getApp().globalData.openid}}" bindtap="handleCreateSeason">创建新赛季</button>
+    <button class="btn btn-danger" bindtap="handleLeaveGroup">退出Group</button>
+  </view>
+</view>

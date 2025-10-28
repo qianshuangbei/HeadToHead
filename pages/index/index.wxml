@@ -1,0 +1,50 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 未登录状态 -->
+  <view wx:if="{{!isLoggedIn}}" class="login-prompt">
+    <view class="login-icon">🎾</view>
+    <text class="title">HeadToHead</text>
+    <text class="subtitle">     </text>
+    <button class="login-btn" bindtap="handleLogin">微信登录</button>
+  </view>
+
+  <!-- 已登录 - 显示Group列表 -->
+  <view wx:else class="content">
+    <!-- 顶部欢迎 -->
+    <view class="header">
+      <view class="greeting">
+        <text class="welcome">欢迎，{{userInfo.nickname}}</text>
+        <text class="subtitle">选择你的Group</text>
+      </view>
+      <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="btn btn-primary" bindtap="handleCreateGroup">
+        <text>+ 创建Group</text>
+      </button>
+      <button class="btn btn-secondary" bindtap="handleJoinGroup">
+        <text>+ 加入Group</text>
+      </button>
+    </view>
+
+    <!-- Group列表 -->
+    <view class="group-list" wx:if="{{groups.length > 0}}">
+      <view class="section-title">我的Group</view>
+      <view class="group-item" wx:for="{{groups}}" wx:key="_id" bindtap="handleSelectGroup" data-group-id="{{item._id}}">
+        <view class="group-info">
+          <text class="group-name">{{item.name}}</text>
+          <text class="group-desc">{{item.member_count}}个成员</text>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text>暂无Group</text>
+      <text>创建或加入一个Group开始吧！</text>
+    </view>
+  </view>
+</view>

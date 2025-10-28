@@ -1,0 +1,8 @@
+<!-- pages/challenge/index.wxml -->
+<view class="challenge-container">
+  <view class="login-prompt">
+    <text class="login-icon">🎾</text>
+    <view class="title">约战功能</view>
+    <view class="subtitle">敬请期待</view>
+  </view>
+</view>

@@ -1,0 +1,346 @@
+/**pages/group/detail.wxss*/
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ===== Group头部 ===== */
+.group-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 16px;
+}
+
+.group-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.member-count {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.share-code {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.btn-copy {
+  width: 60px;
+  height: 32px;
+  background-color: white;
+  color: #667eea;
+  font-size: 12px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+/* ===== 标签栏 ===== */
+.tabs {
+  display: flex;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  color: #999;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+}
+
+.tab.active {
+  color: #1AAD19;
+  border-bottom-color: #1AAD19;
+}
+
+/* ===== 标签内容 ===== */
+.tab-content {
+  padding: 16px;
+}
+
+/* ===== 赛季选择器 ===== */
+.season-selector {
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+}
+
+.status.active {
+  background-color: #1AAD19;
+}
+
+.status.pending {
+  background-color: #FF9500;
+}
+
+.status.ended {
+  background-color: #999;
+}
+
+/* ===== 排名表 ===== */
+.ranking-table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ranking-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 50px 80px;
+  gap: 12px;
+  padding: 12px;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  font-size: 12px;
+  color: #666;
+}
+
+.ranking-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 50px 80px;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.col-rank {
+  text-align: center;
+  font-weight: bold;
+}
+
+.col-player {
+  font-size: 14px;
+  color: #333;
+}
+
+.col-wins {
+  text-align: center;
+  color: #1AAD19;
+  font-weight: bold;
+}
+
+.col-rate {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+/* ===== 比赛卡片 ===== */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.btn {
+  flex: 1;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #1AAD19;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-danger {
+  background-color: #FF4D4F;
+  color: #fff;
+}
+
+.pending-section,
+.recent-section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.match-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.opponent {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.score {
+  font-size: 16px;
+  color: #1AAD19;
+  font-weight: bold;
+}
+
+.match-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-approve,
+.btn-reject {
+  width: 60px;
+  height: 32px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: none;
+}
+
+.btn-approve {
+  background-color: #1AAD19;
+  color: white;
+}
+
+.btn-reject {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+}
+
+.status.approved {
+  background-color: #1AAD19;
+}
+
+.status.rejected {
+  background-color: #999;
+}
+
+/* ===== 成员列表 ===== */
+.members-list {
+  background-color: white;
+  border-radius: 8px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-right: 12px;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-info .name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.member-info .role {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #999;
+  text-align: center;
+}
+
+.empty-state text {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.btn-empty {
+  margin-top: 16px;
+  width: 200px;
+  height: 40px;
+  background-color: #1AAD19;
+  color: white;
+  border-radius: 6px;
+  border: none;
+}
+
+/* ===== 底部操作 ===== */
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+}
