@@ -18,6 +18,12 @@ const initCloudBase = () => {
  * ==================== 用户相关 ====================
  */
 
+// 通用文档创建封装：统一使用 add({ data: doc })
+const addDoc = async (collectionName, doc) => {
+  const db = initCloudBase();
+  return db.collection(collectionName).add({ data: doc });
+};
+
 // 获取或创建用户
 const getUserOrCreate = async (openid, userInfo) => {
   const db = initCloudBase();
@@ -44,9 +50,8 @@ const getUserOrCreate = async (openid, userInfo) => {
     updated_at: now,
   };
 
-  const addRes = await db.collection('users').add({
-    data:{newUser}});
-  return newUser;
+  const addRes = await addDoc('users', newUser);
+  return { ...newUser, _id: addRes._id };
 };
 
 // 更新用户信息
@@ -93,16 +98,16 @@ const createGroup = async (creatorId, groupData) => {
     updated_at: Date.now(),
   };
 
-  const result = await db.collection('groups').add(newGroup);
+  const result = await addDoc('groups', newGroup);
 
   // 同时添加创建者为成员
-  await db.collection('group_members').add({
-    group_id: result._id,
-    user_id: creatorId,
-    joined_at: Date.now(),
-    role: 'creator',
-    is_active: true,
-  });
+  await addDoc('group_members', {
+      group_id: result._id,
+      user_id: creatorId,
+      joined_at: Date.now(),
+      role: 'creator',
+      is_active: true,
+    });
 
   return { ...newGroup, _id: result._id };
 };
@@ -136,13 +141,13 @@ const joinGroupByCode = async (userId, accessCode) => {
   }
 
   // 添加为成员
-  await db.collection('group_members').add({
-    group_id: group._id,
-    user_id: userId,
-    joined_at: Date.now(),
-    role: 'member',
-    is_active: true,
-  });
+  await addDoc('group_members', {
+      group_id: group._id,
+      user_id: userId,
+      joined_at: Date.now(),
+      role: 'member',
+      is_active: true,
+    });
 
   // 更新Group的成员数
   await db.collection('groups').doc(group._id).update({
@@ -218,7 +223,6 @@ const getGroupDetail = async (groupId) => {
 
 // 创建单打比赛
 const createSinglesMatch = async (groupId, seasonId, creatorId, opponentId, score) => {
-  const db = initCloudBase();
 
   // 判断赢家
   let winnerAScore = score.set1.player_a + (score.set2?.player_a || 0) + (score.set3?.player_a || 0);
@@ -240,13 +244,12 @@ const createSinglesMatch = async (groupId, seasonId, creatorId, opponentId, scor
     tags: [],
   };
 
-  const result = await db.collection('matches').add(newMatch);
+  const result = await addDoc('matches', newMatch);
   return { ...newMatch, _id: result._id };
 };
 
 // 创建双打比赛
 const createDoublesMatch = async (groupId, seasonId, creatorId, teamA, teamB, score) => {
-  const db = initCloudBase();
 
   let teamAScore = score.set1.team_a + (score.set2?.team_a || 0) + (score.set3?.team_a || 0);
   let teamBScore = score.set1.team_b + (score.set2?.team_b || 0) + (score.set3?.team_b || 0);
@@ -270,7 +273,7 @@ const createDoublesMatch = async (groupId, seasonId, creatorId, teamA, teamB, sc
     ],
   };
 
-  const result = await db.collection('matches').add(newMatch);
+  const result = await addDoc('matches', newMatch);
   return { ...newMatch, _id: result._id };
 };
 
@@ -383,7 +386,7 @@ const createSeason = async (groupId, seasonName, startDate, endDate) => {
     updated_at: Date.now(),
   };
 
-  const result = await db.collection('seasons').add(newSeason);
+  const result = await addDoc('seasons', newSeason);
 
   // 更新Group的当前赛季
   await db.collection('groups').doc(groupId).update({
