@@ -14,59 +14,6 @@
       />
     </view>
 
-    <!-- Group描述 -->
-    <view class="form-group">
-      <label class="form-label">Group描述 (可选)</label>
-      <textarea
-        class="form-textarea"
-        placeholder="介绍这个Group的特点..."
-        value="{{formData.description}}"
-        bindinput="onDescInput"
-        maxlength="200"
-      />
-      <text class="char-count">{{formData.description.length}}/200</text>
-    </view>
-
-    <!-- 赛季设置 -->
-    <view class="form-group">
-      <view class="form-label">
-        <text>启用赛季制</text>
-        <text class="tag">推荐</text>
-      </view>
-      <switch
-        checked="{{formData.seasonEnabled}}"
-        bindchange="onSeasonToggle"
-      />
-    </view>
-
-    <!-- 赛季配置 (如果启用) -->
-    <view class="form-group" wx:if="{{formData.seasonEnabled}}">
-      <label class="form-label">赛季名称</label>
-      <input
-        class="form-input"
-        placeholder="例: 2025秋季赛"
-        value="{{formData.seasonName}}"
-        bindinput="onSeasonNameInput"
-      />
-    </view>
-
-    <view class="form-group" wx:if="{{formData.seasonEnabled}}">
-      <label class="form-label">赛季开始日期</label>
-      <picker mode="date" value="{{formData.startDate}}" bindchange="onStartDateChange">
-        <view class="picker">
-          {{formData.startDate || '选择日期'}}
-        </view>
-      </picker>
-    </view>
-
-    <view class="form-group" wx:if="{{formData.seasonEnabled}}">
-      <label class="form-label">赛季结束日期</label>
-      <picker mode="date" value="{{formData.endDate}}" bindchange="onEndDateChange">
-        <view class="picker">
-          {{formData.endDate || '选择日期'}}
-        </view>
-      </picker>
-    </view>
 
     <!-- 信息提示 -->
     <view class="info-box">

@@ -21,6 +21,9 @@ Page({
             display_nickname: u.display_nickname || u.nickname || '未命名用户',
             display_avatar: u.display_avatar || u.avatar || '',
             completed_profile: !!u.completed_profile,
+            handedness: u.handedness || '',
+            racket_primary: u.racket_primary || '',
+            tags: u.tags || [],
           };
           this.setData({ user: display, loading: false });
           wx.setStorageSync('cachedUserInfo', display);

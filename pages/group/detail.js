@@ -209,6 +209,19 @@ Page({
     });
   },
 
+  // Navigate to create season page (creator only)
+  handleCreateSeason() {
+    const app = getApp();
+    const creatorId = this.data.group.creator_id;
+    if (app.globalData.openid !== creatorId) {
+      wx.showToast({ title: '仅创建者可创建赛季', icon: 'error' });
+      return;
+    }
+    wx.navigateTo({
+      url: `/pages/season/create?groupId=${this.data.groupId}`
+    });
+  },
+
   // Leave group
   handleLeaveGroup() {
     wx.showModal({

@@ -19,6 +19,32 @@
       <input placeholder="输入昵称" value="{{nickname}}" bindinput="onNicknameInput" maxlength="16" />
     </view>
 
+    <view class="field">
+      <text class="label">持拍手</text>
+      <radio-group bindchange="onHandednessChange">
+        <label><radio value="left" checked="{{handedness==='left'}}" /> 左手</label>
+        <label style="margin-left:16px"><radio value="right" checked="{{handedness==='right'}}" /> 右手</label>
+      </radio-group>
+    </view>
+
+    <view class="field">
+      <text class="label">主力球拍</text>
+      <input placeholder="例如: Babolat Pure Drive" value="{{racket_primary}}" bindinput="onRacketInput" maxlength="40" />
+    </view>
+
+    <view class="field">
+      <text class="label">个人标签 (最多20, 每个≤12字)</text>
+      <input placeholder="输入标签后回车添加" value="{{tagInput}}" bindconfirm="onTagConfirm" bindinput="onTagInput" />
+      <view class="tags">
+        <block wx:for="{{tags}}" wx:key="index">
+          <view class="tag">
+            <text>{{item}}</text>
+            <text class="remove" data-index="{{index}}" bindtap="removeTag">×</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
     <view wx:if="{{error}}" class="error">{{error}}</view>
 
     <button type="primary" loading="{{saving}}" bindtap="saveProfile">完成并进入</button>

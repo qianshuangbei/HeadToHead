@@ -5,6 +5,10 @@ Page({
     mode: '', // wechat | custom
     nickname: '',
     avatarTempPath: '',
+    handedness: '', // left | right
+    racket_primary: '',
+    tagInput: '',
+    tags: [], // max 20
     uploading: false,
     saving: false,
     error: '',
@@ -46,6 +50,47 @@ Page({
 
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value });
+  },
+
+  onHandednessChange(e) {
+    this.setData({ handedness: e.detail.value });
+  },
+
+  onRacketInput(e) {
+    this.setData({ racket_primary: e.detail.value });
+  },
+
+  onTagInput(e) {
+    this.setData({ tagInput: e.detail.value });
+  },
+
+  onTagConfirm(e) {
+    const raw = (e.detail.value || '').trim();
+    if (!raw) return;
+    // Chinese char length check (<=12)
+    const lengthOk = raw.length <= 12; // Rough count; for strict multi-byte you could refine later
+    if (!lengthOk) {
+      this.setData({ error: '标签长度不能超过12个字符' });
+      return;
+    }
+    const tags = this.data.tags.slice();
+    if (tags.length >= 20) {
+      this.setData({ error: '最多添加20个标签' });
+      return;
+    }
+    if (tags.includes(raw)) {
+      this.setData({ error: '标签已存在' });
+      return;
+    }
+    tags.push(raw);
+    this.setData({ tags, tagInput: '', error: '' });
+  },
+
+  removeTag(e) {
+    const idx = e.currentTarget.dataset.index;
+    const tags = this.data.tags.slice();
+    tags.splice(idx, 1);
+    this.setData({ tags });
   },
 
   selectAvatar() {
@@ -105,6 +150,9 @@ Page({
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
         completed_profile: true,
+        handedness: this.data.handedness,
+        racket_primary: this.data.racket_primary,
+        tags: this.data.tags,
         updated_at: Date.now(),
       });
       app.globalData.userInfo = {
@@ -112,11 +160,17 @@ Page({
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
         completed_profile: true,
+        handedness: this.data.handedness,
+        racket_primary: this.data.racket_primary,
+        tags: this.data.tags,
       };
       wx.setStorageSync('hasProfile', true);
       wx.setStorageSync('cachedUserInfo', {
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
+        handedness: this.data.handedness,
+        racket_primary: this.data.racket_primary,
+        tags: this.data.tags,
       });
       wx.switchTab({ url: '/pages/group/list' });
     } catch (e) {

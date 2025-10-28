@@ -5,7 +5,6 @@ Page({
   data: {
     formData: {
       name: '',
-      description: '',
       seasonEnabled: true,
       seasonName: '',
       startDate: '',
@@ -27,14 +26,6 @@ Page({
 
   onNameInput(e) {
     this.setData({ 'formData.name': e.detail.value });
-  },
-
-  onDescInput(e) {
-    this.setData({ 'formData.description': e.detail.value });
-  },
-
-  onSeasonToggle(e) {
-    this.setData({ 'formData.seasonEnabled': e.detail });
   },
 
   onSeasonNameInput(e) {
@@ -59,6 +50,12 @@ Page({
   handleCreate() {
     const form = this.data.formData;
 
+    // Auto set season name if empty
+    if (!form.seasonName) {
+      const today = new Date();
+      this.setData({ 'formData.seasonName': `${today.getFullYear()}赛季` });
+    }
+
     // Validation
     if (!form.name.trim()) {
       wx.showToast({
@@ -68,28 +65,12 @@ Page({
       return;
     }
 
-    if (form.seasonEnabled && !form.seasonName.trim()) {
-      wx.showToast({
-        title: '请输入赛季名称',
-        icon: 'error'
-      });
-      return;
-    }
-
-    if (form.seasonEnabled && (!form.startDate || !form.endDate)) {
-      wx.showToast({
-        title: '请选择赛季日期',
-        icon: 'error'
-      });
-      return;
-    }
 
     this.setData({ loading: true });
 
     const app = getApp();
     const groupData = {
       name: form.name,
-      description: form.description,
       season_enabled: form.seasonEnabled
     };
 
@@ -97,7 +78,7 @@ Page({
     api.createGroup(app.globalData.openid, groupData)
       .then(group => {
         // If season enabled, create season
-        if (form.seasonEnabled) {
+        if (true) {
           const startTime = new Date(form.startDate).getTime();
           const endTime = new Date(form.endDate).getTime();
 
@@ -112,7 +93,7 @@ Page({
       })
       .then(group => {
         wx.showToast({
-          title: '创建成功！',
+          title: '创建成功！已自动开启赛季',
           icon: 'success'
         });
 

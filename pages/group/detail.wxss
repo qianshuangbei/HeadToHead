@@ -186,6 +186,11 @@ page {
   color: #333;
 }
 
+.btn-danger {
+  background-color: #FF4D4F;
+  color: #fff;
+}
+
 .pending-section,
 .recent-section {
   margin-bottom: 24px;

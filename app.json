@@ -34,16 +34,16 @@
         "text": "Group"
       },
       {
-        "pagePath": "pages/match/history",
+        "pagePath": "pages/challenge/index",
         "iconPath": "assets/icons/tennis.png",
         "selectedIconPath": "assets/icons/tennis_blue.png",
-        "text": "比赛"
+        "text": "约战"
       },
       {
         "pagePath": "pages/profile/index",
         "iconPath": "assets/icons/tennis.png",
         "selectedIconPath": "assets/icons/tennis_blue.png",
-        "text": "我的"
+        "text": "Me"
       }
     ]
   },

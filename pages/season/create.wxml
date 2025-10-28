@@ -1,0 +1,46 @@
+<!-- pages/season/create.wxml -->
+<view class="container">
+  <view class="form-container">
+    <view class="form-title">创建新赛季</view>
+
+    <!-- 赛季名称 -->
+    <view class="form-group">
+      <label class="form-label">赛季名称</label>
+      <input
+        class="form-input"
+        placeholder="例如: 2025赛季"
+        value="{{formData.seasonName}}"
+        bindinput="onSeasonNameInput"
+      />
+    </view>
+
+    <!-- 开始日期 -->
+    <view class="form-group">
+      <label class="form-label">开始日期</label>
+      <picker mode="date" value="{{formData.startDate}}" bindchange="onStartDateChange">
+        <view class="picker">{{formData.startDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <!-- 结束日期 -->
+    <view class="form-group">
+      <label class="form-label">结束日期</label>
+      <picker mode="date" value="{{formData.endDate}}" bindchange="onEndDateChange">
+        <view class="picker">{{formData.endDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <!-- 提示 -->
+    <view class="info-box">
+      <text>💡 创建后将自动设为当前赛季。</text>
+    </view>
+
+    <!-- 按钮 -->
+    <view class="button-group">
+      <button class="btn btn-primary" bindtap="handleCreate" disabled="{{loading}}">
+        {{loading ? '创建中...' : '创建赛季'}}
+      </button>
+      <button class="btn btn-secondary" bindtap="handleCancel">取消</button>
+    </view>
+  </view>
+</view>

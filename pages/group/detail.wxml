@@ -116,6 +116,7 @@
 
   <!-- 底部操作按钮 -->
   <view class="bottom-actions">
-    <button class="btn btn-secondary" bindtap="handleLeaveGroup">退出Group</button>
+    <button class="btn btn-primary" wx:if="{{group.creator_id === getApp().globalData.openid}}" bindtap="handleCreateSeason">创建新赛季</button>
+    <button class="btn btn-danger" bindtap="handleLeaveGroup">退出Group</button>
   </view>
 </view>
