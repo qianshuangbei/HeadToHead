@@ -1,0 +1,76 @@
+{
+  "pages": [
+    "miniprogram/pages/index/index",
+    "miniprogram/pages/auth/login",
+    "miniprogram/pages/auth/profile-setup",
+    "miniprogram/pages/group/list",
+    "miniprogram/pages/group/detail",
+    "miniprogram/pages/group/create",
+    "miniprogram/pages/group/join",
+    "miniprogram/pages/match/upload-singles",
+    "miniprogram/pages/match/upload-doubles",
+    "miniprogram/pages/match/review",
+    "miniprogram/pages/match/history",
+    "miniprogram/pages/profile/index",
+    "miniprogram/pages/ranking/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "HeadToHead - 网球排名",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "selectedColor": "#1AAD19",
+    "color": "#999999",
+    "list": [
+      {
+        "pagePath": "miniprogram/pages/index/index",
+        "iconPath": "miniprogram/assets/icons/tennis.png",
+        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "miniprogram/pages/group/list",
+        "iconPath": "miniprogram/assets/icons/tennis.png",
+        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "text": "Group"
+      },
+      {
+        "pagePath": "miniprogram/pages/match/history",
+        "iconPath": "miniprogram/assets/icons/tennis.png",
+        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "text": "比赛"
+      },
+      {
+        "pagePath": "miniprogram/pages/profile/index",
+        "iconPath": "miniprogram/assets/icons/tennis.png",
+        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "cloud": true,
+  "permission": {
+    "scope.userInfo": {
+      "desc": "获取您的昵称和头像用于显示身份信息"
+    },
+    "scope.userLocation": {
+      "desc": "获取您的位置用于更好的服务"
+    }
+  },
+  "plugins": {
+    "WechatSI": {
+      "version": "0.3.5",
+      "provider": "wx069ba97219f725f0"
+    }
+  },
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
+  "sitemapLocation": "sitemap.json"
+}
