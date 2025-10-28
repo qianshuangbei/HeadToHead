@@ -24,6 +24,12 @@ const addDoc = async (collectionName, doc) => {
   return db.collection(collectionName).add({ data: doc });
 };
 
+// 通用文档更新封装：统一使用 update({ data: partial })
+const updateDoc = async (collectionName, docId, partial) => {
+  const db = initCloudBase();
+  return db.collection(collectionName).doc(docId).update({ data: partial });
+};
+
 // 获取或创建用户
 const getUserOrCreate = async (openid, userInfo) => {
   const db = initCloudBase();
@@ -57,8 +63,7 @@ const getUserOrCreate = async (openid, userInfo) => {
 // 更新用户信息
 // 更新用户信息（如果传入 completed_profile=true 则也更新展示昵称/头像）
 const updateUserInfo = async (openid, userData) => {
-  const db = initCloudBase();
-  return db.collection('users').doc(openid).update({
+  return updateDoc('users', openid, {
     ...userData,
     updated_at: Date.now(),
   });
@@ -150,10 +155,10 @@ const joinGroupByCode = async (userId, accessCode) => {
     });
 
   // 更新Group的成员数
-  await db.collection('groups').doc(group._id).update({
-    member_count: db.command.inc(1),
-    updated_at: Date.now(),
-  });
+  await updateDoc('groups', group._id, {
+      member_count: db.command.inc(1),
+      updated_at: Date.now(),
+    });
 
   return group;
 };
@@ -301,11 +306,11 @@ const approveSinglesMatch = async (matchId, approverId, approved) => {
     throw new Error('只有对手才能审核');
   }
 
-  await db.collection('matches').doc(matchId).update({
-    status: approved ? 'approved' : 'rejected',
-    approved_by: approverId,
-    approved_at: Date.now(),
-  });
+  await updateDoc('matches', matchId, {
+      status: approved ? 'approved' : 'rejected',
+      approved_by: approverId,
+      approved_at: Date.now(),
+    });
 
   return match.data;
 };
@@ -371,8 +376,6 @@ const getCurrentRanking = async (groupId) => {
 
 // 创建赛季
 const createSeason = async (groupId, seasonName, startDate, endDate) => {
-  const db = initCloudBase();
-
   const newSeason = {
     group_id: groupId,
     season_name: seasonName,
@@ -389,10 +392,10 @@ const createSeason = async (groupId, seasonName, startDate, endDate) => {
   const result = await addDoc('seasons', newSeason);
 
   // 更新Group的当前赛季
-  await db.collection('groups').doc(groupId).update({
-    current_season_id: result._id,
-    updated_at: Date.now(),
-  });
+  await updateDoc('groups', groupId, {
+      current_season_id: result._id,
+      updated_at: Date.now(),
+    });
 
   return { ...newSeason, _id: result._id };
 };
