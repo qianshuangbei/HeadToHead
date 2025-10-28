@@ -7,9 +7,17 @@
 {
   "_id": "string (openid)",
   "nickname": "string",
-  "avatar": "string",
+  "avatar": "string",                  // 原始头像(微信或上传)
+  "display_nickname": "string",        // 显示用昵称
+  "display_avatar": "string",          // 显示用头像(可裁剪/替换后)
+  "completed_profile": "boolean",      // 是否已完成资料
   "phone": "string",
   "bio": "string",
+  "handedness": "string (left|right)", // 持拍手
+  "racket_primary": "string",          // 主力球拍描述
+  "tags": ["string"],                  // 个人标签(≤20, 每个≤12字)
+  "first_login_at": "number (timestamp)",
+  "last_login_at": "number (timestamp)",
   "created_at": "number (timestamp)",
   "updated_at": "number (timestamp)"
 }
@@ -318,4 +326,4 @@ A: CloudBase 免费版有读写次数限制。超出后需要升级或优化查�
 
 ---
 
-**最后更新**: 2025-10-27
+**最后更新**: 2025-10-28
