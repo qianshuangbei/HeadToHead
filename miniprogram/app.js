@@ -4,7 +4,7 @@ App({
       console.error('Please use WeChat base library 2.2.3 or above to enable cloud capabilities');
     } else {
       wx.cloud.init({
-        env: 'cloud1-4ggxyig7879ad3fb', // Replace with your environment ID
+        env: 'cloud1-6g31j7da6d87ae35', // Replace with your environment ID
         traceUser: true,
       });
     }
