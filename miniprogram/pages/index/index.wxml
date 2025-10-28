@@ -4,7 +4,7 @@
   <view wx:if="{{!isLoggedIn}}" class="login-prompt">
     <view class="login-icon">🎾</view>
     <text class="title">HeadToHead</text>
-    <text class="subtitle">网球Group排名系统</text>
+    <text class="subtitle">     </text>
     <button class="login-btn" bindtap="handleLogin">微信登录</button>
   </view>
 
