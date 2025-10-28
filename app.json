@@ -1,23 +1,23 @@
 {
   "pages": [
-    "miniprogram/pages/index/index",
-    "miniprogram/pages/auth/login",
-    "miniprogram/pages/auth/profile-setup",
-    "miniprogram/pages/group/list",
-    "miniprogram/pages/group/detail",
-    "miniprogram/pages/group/create",
-    "miniprogram/pages/group/join",
-    "miniprogram/pages/match/upload-singles",
-    "miniprogram/pages/match/upload-doubles",
-    "miniprogram/pages/match/review",
-    "miniprogram/pages/match/history",
-    "miniprogram/pages/profile/index",
-    "miniprogram/pages/ranking/detail"
+    "pages/index/index",
+    "pages/auth/login",
+    "pages/auth/profile-setup",
+    "pages/group/list",
+    "pages/group/detail",
+    "pages/group/create",
+    "pages/group/join",
+    "pages/match/upload-singles",
+    "pages/match/upload-doubles",
+    "pages/match/review",
+    "pages/match/history",
+    "pages/profile/index",
+    "pages/ranking/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "HeadToHead - 网球排名",
+    "navigationBarTitleText": "HeadToHead",
     "navigationBarTextStyle": "black",
     "navigationStyle": "default"
   },
@@ -28,21 +28,21 @@
     "color": "#999999",
     "list": [
       {
-        "pagePath": "miniprogram/pages/group/list",
-        "iconPath": "miniprogram/assets/icons/tennis.png",
-        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "pagePath": "pages/group/list",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
         "text": "Group"
       },
       {
-        "pagePath": "miniprogram/pages/match/history",
-        "iconPath": "miniprogram/assets/icons/tennis.png",
-        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "pagePath": "pages/match/history",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
         "text": "比赛"
       },
       {
-        "pagePath": "miniprogram/pages/profile/index",
-        "iconPath": "miniprogram/assets/icons/tennis.png",
-        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
+        "pagePath": "pages/profile/index",
+        "iconPath": "assets/icons/tennis.png",
+        "selectedIconPath": "assets/icons/tennis_blue.png",
         "text": "我的"
       }
     ]

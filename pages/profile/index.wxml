@@ -1,0 +1,15 @@
+<!--pages/profile/index.wxml-->
+<view class="profile-container">
+  <block wx:if="{{loading}}">
+    <text>加载中...</text>
+  </block>
+  <block wx:elif="{{user}}">
+    <image wx:if="{{user.display_avatar}}" class="avatar" src="{{user.display_avatar}}" mode="aspectFill" />
+    <text class="nickname">{{user.display_nickname}}</text>
+    <text class="status">{{user.completed_profile ? '资料已完成' : '资料未完成'}}</text>
+    <button size="mini" bindtap="goEditProfile">修改资料</button>
+  </block>
+  <block wx:else>
+    <text>未获取到用户信息</text>
+  </block>
+</view>
