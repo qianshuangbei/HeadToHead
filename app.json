@@ -62,12 +62,6 @@
       "desc": "获取您的位置用于更好的服务"
     }
   },
-  "plugins": {
-    "WechatSI": {
-      "version": "0.3.5",
-      "provider": "wx069ba97219f725f0"
-    }
-  },
   "requiredBackgroundModes": [
     "audio",
     "location"

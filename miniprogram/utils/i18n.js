@@ -119,9 +119,8 @@ const translations = {
   }
 };
 
-// Default language will be auto-detected in app.js via initializeLanguage()
-// Fallback to English if auto-detection fails
-let currentLanguage = 'en';
+// Default language now fixed to Chinese ('zh') after removing speech plugin
+let currentLanguage = 'zh';
 
 /**
  * Set the current language

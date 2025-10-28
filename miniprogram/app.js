@@ -25,19 +25,11 @@ App({
       const i18n = require('./utils/i18n.js');
       const systemInfo = wx.getSystemInfoSync();
 
-      // Get system language code (e.g., 'zh', 'en', 'zh-Hans', 'en-US', etc.)
-      const systemLanguage = systemInfo.language || 'en';
-      console.log('[Language] System language detected:', systemLanguage);
-
-      // Determine language: Chinese (zh-*) or English (everything else)
-      let selectedLanguage = 'en'; // Default to English
-      if (systemLanguage.startsWith('zh')) {
-        selectedLanguage = 'zh';
-      }
-
+      // Force default language to Chinese regardless of system setting (plugin removed)
+      const selectedLanguage = 'zh';
       i18n.setLanguage(selectedLanguage);
       this.globalData.language = selectedLanguage;
-      console.log('[Language] App language set to:', selectedLanguage);
+      console.log('[Language] App language set to default:', selectedLanguage);
     } catch (error) {
       console.error('[Language] Failed to initialize language:', error);
       // Fallback: default to English
