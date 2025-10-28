@@ -28,12 +28,6 @@
     "color": "#999999",
     "list": [
       {
-        "pagePath": "miniprogram/pages/index/index",
-        "iconPath": "miniprogram/assets/icons/tennis.png",
-        "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",
-        "text": "首页"
-      },
-      {
         "pagePath": "miniprogram/pages/group/list",
         "iconPath": "miniprogram/assets/icons/tennis.png",
         "selectedIconPath": "miniprogram/assets/icons/tennis_blue.png",

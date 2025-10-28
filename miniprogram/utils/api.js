@@ -30,14 +30,20 @@ const getUserOrCreate = async (openid, userInfo) => {
     return result.data;
   } else {
     // 新用户，创建
+    const now = Date.now();
     const newUser = {
       _id: openid,
-      nickname: userInfo.nickName || '未命名用户',
-      avatar: userInfo.avatarUrl || '',
+      nickname: userInfo.nickName || '未命名用户', // 原始微信昵称或占位
+      avatar: userInfo.avatarUrl || '', // 原始微信头像或占位
+      display_nickname: userInfo.nickName || '未命名用户', // 用于展示，可后续自定义
+      display_avatar: userInfo.avatarUrl || '', // 用于展示，可后续自定义
+      completed_profile: false, // 首次创建默认未完成个性化选择
       phone: '',
       bio: '',
-      created_at: Date.now(),
-      updated_at: Date.now(),
+      first_login_at: now,
+      last_login_at: now,
+      created_at: now,
+      updated_at: now,
     };
 
     await db.collection('users').doc(openid).set(newUser);
@@ -46,6 +52,7 @@ const getUserOrCreate = async (openid, userInfo) => {
 };
 
 // 更新用户信息
+// 更新用户信息（如果传入 completed_profile=true 则也更新展示昵称/头像）
 const updateUserInfo = async (openid, userData) => {
   const db = initCloudBase();
   return db.collection('users').doc(openid).update({

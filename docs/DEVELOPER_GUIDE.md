@@ -316,6 +316,62 @@ frontend/
 
 ---
 
+## 👤 首次登录与资料设置流程
+
+### 目标
+为新用户提供一次性资料设置（头像+昵称）选择：使用微信资料或自定义；老用户直接进入业务主界面（Group 列表）。
+
+### 数据字段 (users 集合新增)
+- completed_profile: boolean 是否已完成资料设置
+- display_nickname: string 展示昵称（可与原始微信昵称不同）
+- display_avatar: string 展示头像 URL 或 cloud fileID
+- first_login_at: timestamp 首次创建时间
+- last_login_at: timestamp 最近一次登录时间
+
+### 本地缓存
+- hasProfile: boolean 缓存 completed_profile 结果，加速启动
+- cachedUserInfo: { display_nickname, display_avatar }
+
+### 启动流程
+1. App onLaunch 调用云函数 login 获取 openid: [miniprogram/app.js:40-46](../miniprogram/app.js#L40-L46)
+2. 查询 users 文档；若不存在创建占位：completed_profile=false: [miniprogram/app.js:50-79](../miniprogram/app.js#L50-L79)
+3. 更新 last_login_at 并决定跳转：
+   - 未完成 profile → wx.reLaunch 到 profile-setup: [miniprogram/app.js:82-86](../miniprogram/app.js#L82-L86)
+   - 已完成 → switchTab 到 Group 列表: [miniprogram/app.js:87-89](../miniprogram/app.js#L87-L89)
+
+### 首次资料设置页面
+逻辑与界面：
+- 选择使用微信资料或自定义: [miniprogram/pages/auth/profile-setup.js:13-25](../miniprogram/pages/auth/profile-setup.js#L13-L25)
+- 自定义/编辑模式预填: [miniprogram/pages/auth/profile-setup.js:31-44](../miniprogram/pages/auth/profile-setup.js#L31-L44)
+- 昵称校验 + 头像上传: [miniprogram/pages/auth/profile-setup.js:47-74](../miniprogram/pages/auth/profile-setup.js#L47-L74)
+- 保存资料并写入 completed_profile: [miniprogram/pages/auth/profile-setup.js:76-105](../miniprogram/pages/auth/profile-setup.js#L76-L105)
+- WXML 结构: [miniprogram/pages/auth/profile-setup.wxml:2-25](../miniprogram/pages/auth/profile-setup.wxml#L2-L25)
+
+### 资料展示与修改入口
+- “我的” tab 读取缓存并刷新： [miniprogram/pages/profile/index.js:8-26](../miniprogram/pages/profile/index.js#L8-L26)
+- 修改资料入口按钮: [miniprogram/pages/profile/index.wxml:7-11](../miniprogram/pages/profile/index.wxml#L7-L11)
+- 导航到编辑模式： [miniprogram/pages/profile/index.js:42-45](../miniprogram/pages/profile/index.js#L42-L45)
+
+### 回退与错误处理
+- 微信授权失败提示并允许自定义: [miniprogram/pages/auth/profile-setup.js:21-23](../miniprogram/pages/auth/profile-setup.js#L21-L23)
+- 头像上传失败保留空头像 + 错误文案: [miniprogram/pages/auth/profile-setup.js:67-70](../miniprogram/pages/auth/profile-setup.js#L67-L70)
+- 保存失败提示重试: [miniprogram/pages/auth/profile-setup.js:106-107](../miniprogram/pages/auth/profile-setup.js#L106-L107)
+
+### 测试场景 Checklist
+- [ ] 新用户首次进入 → 跳转 profile-setup → 使用微信资料保存 → 进入 Group
+- [ ] 新用户自定义昵称/头像保存
+- [ ] 老用户 completed_profile=true 直接进入 Group 无跳转
+- [ ] 微信授权拒绝后自定义成功
+- [ ] 头像上传失败时错误提示不跳转
+- [ ] 昵称长度边界 (1,2,16,17) 校验与提示
+- [ ] 编辑模式修改资料后“我的”页刷新缓存
+
+### 未来扩展
+- 增加头像裁剪与压缩
+- 敏感词过滤服务端校验
+- 用户资料变更历史（审计字段）
+- 多语言支持显示昵称（i18n key 映射）
+
 ## 🔒 安全与合规
 
 ### 认证与授权

@@ -1,66 +1,46 @@
 // miniprogram/pages/profile/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    loading: true,
+    user: null,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  loadUser() {
+    const app = getApp();
+    // 先使用缓存数据，加快首屏
+    const cached = wx.getStorageSync('cachedUserInfo');
+    if (cached) {
+      this.setData({ user: cached });
+    }
+    if (app.globalData.openid) {
+      const db = wx.cloud.database();
+      db.collection('users').doc(app.globalData.openid).get().then(res => {
+        if (res.data) {
+          const u = res.data;
+          const display = {
+            display_nickname: u.display_nickname || u.nickname || '未命名用户',
+            display_avatar: u.display_avatar || u.avatar || '',
+            completed_profile: !!u.completed_profile,
+          };
+          this.setData({ user: display, loading: false });
+          wx.setStorageSync('cachedUserInfo', display);
+        } else {
+          this.setData({ loading: false });
+        }
+      }).catch(() => {
+        this.setData({ loading: false });
+      });
+    } else {
+      this.setData({ loading: false });
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
-
+    this.loadUser();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  goEditProfile() {
+    // 进入同一个资料设置页复用逻辑
+    wx.navigateTo({ url: '/miniprogram/pages/auth/profile-setup?edit=1' });
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
-})
+});

@@ -42,10 +42,54 @@ App({
     wx.cloud.callFunction({
       name: 'login',
       data: {},
-      success: res => {
+      success: async res => {
         console.log('[Cloud Function] Login successful, user openid:', res.result.openid);
         self.globalData.openid = res.result.openid;
         self.globalData.isLoggedIn = true;
+
+        // 拉取/创建用户文档并更新 last_login_at
+        try {
+          const db = wx.cloud.database();
+          const userDoc = await db.collection('users').doc(res.result.openid).get();
+          if (userDoc.data) {
+            await db.collection('users').doc(res.result.openid).update({
+              last_login_at: Date.now(),
+              updated_at: Date.now(),
+            });
+            self.globalData.userInfo = userDoc.data;
+          } else {
+            // 创建占位用户（不获取微信信息，只保存 ID，留待 profile-setup）
+            const now = Date.now();
+            const placeholder = {
+              _id: res.result.openid,
+              nickname: '',
+              avatar: '',
+              display_nickname: '',
+              display_avatar: '',
+              completed_profile: false,
+              phone: '',
+              bio: '',
+              first_login_at: now,
+              last_login_at: now,
+              created_at: now,
+              updated_at: now,
+            };
+            await db.collection('users').doc(res.result.openid).set(placeholder);
+            self.globalData.userInfo = placeholder;
+          }
+
+          // 根据是否完成 profile 跳转
+          const completed = self.globalData.userInfo.completed_profile;
+          if (!completed) {
+            // 跳转到首次资料设置页
+            wx.reLaunch({ url: '/miniprogram/pages/auth/profile-setup' });
+          } else {
+            // 已完成，跳转到 Group 主页面（或保持 tabBar）
+            wx.switchTab({ url: '/miniprogram/pages/group/list' });
+          }
+        } catch (e) {
+          console.error('[Login Flow] User document handling failed', e);
+        }
       },
       fail: err => {
         console.error('[Cloud Function] Login failed', err);
