@@ -69,10 +69,8 @@ Page({
         const userInfo = res.userInfo;
         api.getUserOrCreate(app.globalData.openid, userInfo)
           .then(() => {
-            wx.showToast({ title: '登录成功', icon: 'success' });
-            // 保存用户信息，展示选择浮层
+            // 延后 toast 到真正资料确定前
             this.setData({ userInfo, showChoiceSheet: true });
-            // 存入 global 供 profile-setup 使用
             app.globalData.userInfo = userInfo;
           }).catch(err => {
             console.error('Login failed:', err);
@@ -101,7 +99,7 @@ Page({
         last_login_at: Date.now()
       });
       app.globalData.userInfo = profileRes.userInfo;
-      wx.showToast({ title: '已更新', icon: 'success' });
+      wx.showToast({ title: '登录成功', icon: 'success' });
       wx.switchTab({ url: '/pages/index/index' });
     } catch (e) {
       console.error('获取/更新微信资料失败', e);
@@ -152,7 +150,7 @@ Page({
         last_login_at: Date.now()
       });
       app.globalData.userInfo = { nickName: nickname, avatarUrl: avatar };
-      wx.showToast({ title: '已保存', icon: 'success' });
+      wx.showToast({ title: '登录成功', icon: 'success' });
       wx.switchTab({ url: '/pages/index/index' });
     } catch (e) {
       console.error('保存自定义资料失败', e);
