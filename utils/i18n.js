@@ -55,6 +55,14 @@ const translations = {
     'selectOpponent': 'Please select opponent',
     'enterSet1Score': 'Please enter set 1 score',
     'enterSet2Score': 'Please enter set 2 score',
+    'enterScore': 'Please enter score',
+
+    // Match formats (labels)
+    'format.6_games': '6 Games',
+    'format.4_games': '4 Games',
+    'format.tb7': 'Tiebreak to 7',
+    'format.tb10': 'Tiebreak to 10',
+    'format.tb11': 'Tiebreak to 11',
 
     // Group join validation
     'enterAccessCode': 'Please enter access code',
@@ -106,9 +114,17 @@ const translations = {
     'rejectFailed': '拒绝失败',
 
     // Match upload validation
-    'selectOpponent': '请选择对手',
+    'selectOpponent': '请选对手',
     'enterSet1Score': '请输入第一盘比分',
     'enterSet2Score': '请输入第二盘比分',
+    'enterScore': '请输入比分',
+
+    // Match formats (labels)
+    'format.6_games': '六局',
+    'format.4_games': '四局',
+    'format.tb7': '抢7',
+    'format.tb10': '抢10',
+    'format.tb11': '抢11',
 
     // Group join validation
     'enterAccessCode': '请输入分享码',

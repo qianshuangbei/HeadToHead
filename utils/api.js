@@ -207,20 +207,20 @@ const getGroupDetail = async (groupId) => {
  * ==================== 比赛相关 ====================
  */
 
-// 创建单打比赛
-const createSinglesMatch = async (groupId, seasonId, creatorId, opponentId, score) => {
-
-  // 判断赢家
+// 创建单打比赛 (扩展支持 format 与单盘比分结构)
+const createSinglesMatch = async (groupId, seasonId, creatorId, opponentId, score, format) => {
+  // 兼容：如果只传入 set1 则仍按原逻辑计算；支持仅单盘
   let winnerAScore = score.set1.player_a + (score.set2?.player_a || 0) + (score.set3?.player_a || 0);
   let winnerBScore = score.set1.player_b + (score.set2?.player_b || 0) + (score.set3?.player_b || 0);
 
   const newMatch = {
-    match_type: 'singles',
+    match_type: 'singles', // 与比赛形式 format 区分
     group_id: groupId,
     season_id: seasonId,
     player_a_id: creatorId,
     player_b_id: opponentId,
     score: score,
+    format: format || '', // 新增比赛形式字段：6_games / 4_games / tb7 / tb10 / tb11
     winning_player_id: winnerAScore > winnerBScore ? creatorId : opponentId,
     status: 'pending',
     created_by: creatorId,
