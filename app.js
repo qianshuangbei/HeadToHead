@@ -46,12 +46,14 @@ App({
         console.log('[Cloud Function] Login successful, user openid:', res.result.openid);
         self.globalData.openid = res.result.openid;
         self.globalData.isLoggedIn = true;
+        self.globalData.firstLogin = true;        
 
         // 拉取/创建用户文档并更新 last_login_at
         try {
           const db = wx.cloud.database();
           const userDoc = await db.collection('users').where({ _openid: res.result.openid}).get();
           if (userDoc.data) {
+            self.globalData.firstLogin = false;
             await db.collection('users').where({ _openid: res.result.openid}).update({
               data:{
               last_login_at: Date.now(),
@@ -82,8 +84,8 @@ App({
 
           // 根据是否完成 profile 跳转
           const completed = self.globalData.userInfo.completed_profile;
-          if (!completed) {
-            wx.reLaunch({ url: '/pages/auth/profile-setup' });
+          if (self.globalData.firstLogin) {
+            wx.reLaunch({ url: '/pages/auth/login' });
           } else {
             wx.switchTab({ url: '/pages/group/list' });
           }
@@ -104,5 +106,6 @@ App({
     isLoggedIn: false,
     currentGroup: null,
     language: 'en', // Will be set by initializeLanguage()
+    firstLogin: true,
   }
 });

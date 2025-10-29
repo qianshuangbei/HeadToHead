@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/auth/login",
+    "pages/index/index",
     "pages/auth/profile-setup",
     "pages/group/list",
     "pages/group/detail",

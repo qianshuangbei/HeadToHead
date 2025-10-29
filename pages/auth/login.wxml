@@ -1,5 +1,5 @@
 <!-- pages/auth/login.wxml -->
-<view class="login-prompt" wx:if="{{showLoginPrompt && !showChoiceSheet}}">
+<view class="login-prompt">
   <view class="login-icon">🎾</view>
   <text class="title">HeadToHead</text>
   <text class="subtitle"></text>
