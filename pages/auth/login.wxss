@@ -1,1 +1,15 @@
 /* pages/auth/login.wxss */
+page { background-color: #f5f5f5; }
+.login-prompt {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#fff;
+}
+.login-icon { font-size:80px; margin-bottom:30px; }
+.login-prompt .title { font-size:32px; font-weight:bold; margin-bottom:10px; }
+.login-prompt .subtitle { font-size:16px; opacity:.9; margin-bottom:40px; }
+.login-btn { width:280px; height:44px; background:#fff; color:#667eea; font-weight:bold; border-radius:22px; }
+.checking { padding:40px; text-align:center; color:#666; }
+.choice-sheet { position:fixed; left:0; right:0; bottom:0; background:#fff; box-shadow:0 -2px 12px rgba(0,0,0,.15); border-top-left-radius:16px; border-top-right-radius:16px; padding:24px; }
+.sheet-content button { margin-top:12px; }
+.sheet-title { font-size:18px; font-weight:600; margin-bottom:12px; }
+.hint { font-size:12px; color:#666; margin-top:16px; }

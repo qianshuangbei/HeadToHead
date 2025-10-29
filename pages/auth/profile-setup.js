@@ -1,7 +1,7 @@
 // pages/auth/profile-setup.js
 Page({
   data: {
-    step: 'choose', // choose | editing
+    step: 'editing',
     mode: '', // wechat | custom
     nickname: '',
     avatarTempPath: '',
@@ -14,6 +14,7 @@ Page({
     error: '',
   },
 
+  // 已迁移到登录页底部浮层，不再使用
   chooseWeChatProfile() {
     this.setData({ mode: 'wechat', error: '' });
     wx.getUserProfile({
@@ -28,21 +29,33 @@ Page({
     });
   },
 
+  // 已迁移到登录页底部浮层，不再使用
   chooseCustomProfile() {
     this.setData({ mode: 'custom', step: 'editing', error: '' });
   },
 
   onLoad(options) {
-    // 如果是编辑模式，预填当前资料
+    const app = getApp();
+    // 接收登录页传入的 mode (wechat | custom)
+    if (options && options.mode) {
+      const info = app.globalData.userInfo || {};
+      if (options.mode === 'wechat') {
+        this.setData({
+          nickname: info.nickName || info.nickname || '',
+          avatarTempPath: info.avatarUrl || info.avatar || '',
+        });
+      } else if (options.mode === 'custom') {
+        this.setData({ nickname: '', avatarTempPath: '' });
+      }
+    }
+    // 编辑模式额外预填（保留原逻辑）
     if (options && options.edit === '1') {
-      const app = getApp();
       const info = app.globalData.userInfo;
       if (info) {
         this.setData({
-          step: 'editing',
-          mode: info.completed_profile ? 'custom' : '',
-          nickname: info.display_nickname || info.nickname || '',
-          avatarTempPath: info.display_avatar || info.avatar || '',
+          mode: info.completed_profile ? 'custom' : this.data.mode,
+          nickname: this.data.nickname || info.display_nickname || info.nickname || '',
+          avatarTempPath: this.data.avatarTempPath || info.display_avatar || info.avatar || '',
         });
       }
     }
