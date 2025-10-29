@@ -24,8 +24,10 @@ exports.main = async (event, context) => {
 
     for (const season of pendingResult.data) {
       await db.collection('seasons').doc(season._id).update({
+        data:{
         status: 'active',
         updated_at: now
+        }
       });
       console.log(`[Season Progression] Season "${season.season_name}" transitioned from pending to active`);
     }
@@ -40,8 +42,10 @@ exports.main = async (event, context) => {
 
     for (const season of activeResult.data) {
       await db.collection('seasons').doc(season._id).update({
-        status: 'ended',
-        updated_at: now
+        data:{
+          status: 'ended',
+          updated_at: now
+        }
       });
       console.log(`[Season Progression] Season "${season.season_name}" transitioned from active to ended`);
 

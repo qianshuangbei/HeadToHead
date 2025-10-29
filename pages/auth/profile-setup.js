@@ -146,14 +146,16 @@ Page({
     const db = wx.cloud.database();
     try {
       const displayAvatar = await this.uploadAvatarIfNeeded();
-      await db.collection('users').doc(openid).update({
-        display_nickname: this.data.nickname,
-        display_avatar: displayAvatar,
-        completed_profile: true,
-        handedness: this.data.handedness,
-        racket_primary: this.data.racket_primary,
-        tags: this.data.tags,
-        updated_at: Date.now(),
+      await db.collection('users').where({ _openid: openid}).update({ 
+        data:{
+          display_nickname: this.data.nickname,
+          display_avatar: displayAvatar,
+          completed_profile: true,
+          handedness: this.data.handedness,
+          racket_primary: this.data.racket_primary,
+          tags: this.data.tags,
+          updated_at: Date.now(),
+        }
       });
       app.globalData.userInfo = {
         ...app.globalData.userInfo,
@@ -174,6 +176,7 @@ Page({
       });
       wx.switchTab({ url: '/pages/group/list' });
     } catch (e) {
+      console.error('save profile error', e);
       this.setData({ error: '保存失败，请重试' });
     } finally {
       this.setData({ saving: false });

@@ -12,7 +12,8 @@
     "pages/match/review",
     "pages/match/history",
     "pages/profile/index",
-    "pages/ranking/detail"
+    "pages/ranking/detail",
+    "pages/challenge/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,7 +29,7 @@
     "color": "#999999",
     "list": [
       {
-        "pagePath": "pages/group/list",
+        "pagePath": "pages/index/index",
         "iconPath": "assets/icons/tennis.png",
         "selectedIconPath": "assets/icons/tennis_blue.png",
         "text": "Group"

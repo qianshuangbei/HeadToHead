@@ -68,7 +68,7 @@ Page({
     const app = getApp();
     const db = api.initCloudBase();
 
-    db.collection('users').doc(app.globalData.openid).get()
+    db.collection('users').where({ _openid: app.globalData.openid}).get()
       .then(res => {
         if (res.data) {
           this.setData({ userInfo: res.data });

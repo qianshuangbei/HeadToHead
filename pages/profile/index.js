@@ -14,7 +14,7 @@ Page({
     }
     if (app.globalData.openid) {
       const db = wx.cloud.database();
-      db.collection('users').doc(app.globalData.openid).get().then(res => {
+      db.collection('users').where({ _openid: app.globalData.openid }).get().then(res => {
         if (res.data) {
           const u = res.data;
           const display = {

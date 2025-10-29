@@ -50,11 +50,13 @@ App({
         // 拉取/创建用户文档并更新 last_login_at
         try {
           const db = wx.cloud.database();
-          const userDoc = await db.collection('users').doc(res.result.openid).get();
+          const userDoc = await db.collection('users').where({ _openid: res.result.openid}).get();
           if (userDoc.data) {
-            await db.collection('users').doc(res.result.openid).update({
+            await db.collection('users').where({ _openid: res.result.openid}).update({
+              data:{
               last_login_at: Date.now(),
               updated_at: Date.now(),
+              }
             });
             self.globalData.userInfo = userDoc.data;
           } else {
@@ -74,7 +76,7 @@ App({
               created_at: now,
               updated_at: now,
             };
-            await db.collection('users').doc(res.result.openid).set(placeholder);
+            await db.collection('users').where({ _openid: res.result.openid}).set(placeholder);
             self.globalData.userInfo = placeholder;
           }
 

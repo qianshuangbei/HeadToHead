@@ -27,7 +27,7 @@ const addDoc = async (collectionName, doc) => {
 // 通用文档更新封装：统一使用 update({ data: partial })
 const updateDoc = async (collectionName, docId, partial) => {
   const db = initCloudBase();
-  return db.collection(collectionName).doc(docId).update({ data: partial });
+  return db.collection(collectionName).where({ _openid: docId}).update({ data: partial });
 };
 
 // 使用外部 buildUser / buildGroup (见 models.js)
