@@ -76,10 +76,81 @@ Page({
       }
     });
   },
-  handleChooseWechatProfile() {
-    wx.navigateTo({ url: '/pages/auth/profile-setup?mode=wechat' });
+  async handleChooseWechatProfile() {
+    // 直接获取头像和昵称，并更新 users 集合后跳转首页
+    const app = getApp();
+    try {
+      const profileRes = await wx.getUserProfile({ desc: '获取头像和昵称' });
+      const { avatarUrl, nickName } = profileRes.userInfo;
+      // 若用户记录已存在则更新，否则创建
+      await api.getUserOrCreate(app.globalData.openid, profileRes.userInfo);
+      // 更新展示字段（与完整资料区分）
+      await api.updateUserInfo(app.globalData.openid, {
+        nickname: nickName,
+        avatar: avatarUrl,
+        display_nickname: nickName,
+        display_avatar: avatarUrl,
+        last_login_at: Date.now()
+      });
+      app.globalData.userInfo = profileRes.userInfo;
+      wx.showToast({ title: '已更新', icon: 'success' });
+      wx.switchTab({ url: '/pages/index/index' });
+    } catch (e) {
+      console.error('获取/更新微信资料失败', e);
+      wx.showToast({ title: '操作失败', icon: 'error' });
+    }
   },
   handleChooseCustomProfile() {
-    wx.navigateTo({ url: '/pages/auth/profile-setup?mode=custom' });
+    // 展开自定义资料编辑区域
+    this.setData({ showCustomEditor: true });
+  },
+  handlePickAvatar() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempPath = res.tempFilePaths[0];
+        this.setData({ avatarTemp: tempPath });
+      },
+      fail: (e) => {
+        console.error('选择头像失败', e);
+      }
+    });
+  },
+  handleCustomNicknameInput(e) {
+    this.setData({ nicknameTemp: e.detail.value });
+  },
+  async handleSaveCustomProfile() {
+    if (this.data.savingCustom) return;
+    const app = getApp();
+    const nickname = (this.data.nicknameTemp || '').trim();
+    const avatar = this.data.avatarTemp || '';
+    if (!nickname) {
+      wx.showToast({ title: '请输入昵称', icon: 'none' });
+      return;
+    }
+    this.setData({ savingCustom: true });
+    try {
+      // 确保用户存在
+      await api.getUserOrCreate(app.globalData.openid, { nickName: nickname, avatarUrl: avatar });
+      // 更新 users 集合
+      await api.updateUserInfo(app.globalData.openid, {
+        nickname,
+        avatar,
+        display_nickname: nickname,
+        display_avatar: avatar,
+        completed_profile: true,
+        last_login_at: Date.now()
+      });
+      app.globalData.userInfo = { nickName: nickname, avatarUrl: avatar };
+      wx.showToast({ title: '已保存', icon: 'success' });
+      wx.switchTab({ url: '/pages/index/index' });
+    } catch (e) {
+      console.error('保存自定义资料失败', e);
+      wx.showToast({ title: '保存失败', icon: 'error' });
+    } finally {
+      this.setData({ savingCustom: false });
+    }
   }
 });
