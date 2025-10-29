@@ -42,9 +42,17 @@ Page({
     try {
       const res = await db.collection('users').where({ _openid: openid }).get();
       if (res && res.data && res.data.length > 0) {
-        wx.switchTab({ url: '/pages/index/index' });
+        const userDoc = res.data[0];
+        // 仅在已完成资料时自动跳转首页，避免自定义头像阶段被跳走
+        if (userDoc.completed_profile) {
+          wx.switchTab({ url: '/pages/index/index' });
+          return;
+        }
+        // 否则显示选择浮层
+        this.setData({ showChoiceSheet: true });
         return;
       }
+      // 无用户记录，显示登录按钮
       this.setData({ showLoginPrompt: true });
     } catch (e) {
       console.error('checkUser error', e);
