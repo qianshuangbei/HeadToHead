@@ -62,6 +62,15 @@ const updateUserInfo = async (openid, userData) => {
  * ==================== Group相关 ====================
  */
 
+// 生成 GUID (UUID v4)
+const generateGuid = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
 // 生成分享码 (6位字母数字)
 const generateAccessCode = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -79,6 +88,7 @@ const createGroup = async (creatorId, groupData) => {
   const newGroup = buildGroup(
     groupData.name,
     groupData.description,
+    generateGuid(),
     creatorId,
     groupData.season_enabled,
     generateAccessCode()

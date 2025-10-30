@@ -63,15 +63,17 @@ function buildUser(nickname, avatar) {
 /**
  * @param {string} name
  * @param {string} description
+ * @param {string} id         Internal field stored as _openid
  * @param {string} creatorId  Internal field stored as creator_id
  * @param {boolean} seasonEnabled
  * @param {string} [accessCode]
  * @returns {Group}
  */
-function buildGroup(name, description, creatorId, seasonEnabled, accessCode) {
+function buildGroup(name, description, id, creatorId, seasonEnabled, accessCode) {
   const now = Date.now();
   return {
     name,
+    _openid: id,
     description: description || '',
     creator_id: creatorId,
     access_code: accessCode || generateAccessCodePlaceholder(),
