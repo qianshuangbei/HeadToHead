@@ -73,7 +73,7 @@ Page({
   loadOpponents() {
     api.getGroupMembers(this.data.groupId)
       .then(members => {
-        const opponents = members.filter(m => m !== this.data.self_id);
+        const opponents = members.filter(m => m.openid !== this.data.self_id);
         this.setData({
           opponents: opponents,
           selectedOpponent: opponents.length > 0 ? opponents[0] : null

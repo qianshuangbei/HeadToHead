@@ -188,7 +188,25 @@ const getGroupMembers = async (groupId) => {
     })
     .get();
   const memberIds = members.data.map(m => m.user_id);
-  return memberIds;
+
+  // 获取成员的完整用户信息
+  if (memberIds.length === 0) {
+    return [];
+  }
+
+  const users = await db.collection('users')
+    .where({
+      openid: db.command.in(memberIds)
+    })
+    .get();
+
+  // 返回包含 openid, display_avatar, nickname 的用户信息
+  return users.data.map(user => ({
+    user_id: user.openid,
+    openid: user.openid,
+    display_avatar: user.display_avatar,
+    nickname: user.nickname
+  }));
 }
 
 // 获取Group详情(包含成员)
