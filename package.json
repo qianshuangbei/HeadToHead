@@ -1,0 +1,16 @@
+{
+  "name": "head-to-head",
+  "version": "1.0.0",
+  "description": "HeadToHead 网球比赛管理小程序",
+  "main": "app.js",
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
