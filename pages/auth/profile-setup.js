@@ -103,9 +103,14 @@ Page({
   },
 
   async uploadAvatarIfNeeded() {
-    if (!this.data.avatarTempPath || this.data.avatarTempPath.startsWith('https://')) {
-      return this.data.avatarTempPath; // 微信头像或未选择
+    if (!this.data.avatarTempPath) {
+      return ''; // 未选择头像
     }
+    // 如果是云存储 URL (cloud://) 或网络 URL (https://)，直接返回
+    if (this.data.avatarTempPath.startsWith('cloud://') || this.data.avatarTempPath.startsWith('https://')) {
+      return this.data.avatarTempPath;
+    }
+    // wxfile:// 临时文件或其他本地路径需要上传
     this.setData({ uploading: true });
     try {
       const openid = getApp().globalData.openid;
