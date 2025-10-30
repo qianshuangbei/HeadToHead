@@ -8,7 +8,7 @@
       <view class="avatar-wrapper">
         <image wx:if="{{user.display_avatar}}" class="avatar" src="{{user.display_avatar}}" mode="aspectFill" />
         <view wx:else class="avatar placeholder">
-          <text>{{user.display_nickname.charAt ? user.display_nickname.charAt(0) : '?'}}</text>
+          <text>{{user.nickname.charAt ? user.nickname.charAt(0) : '?'}}</text>
         </view>
       </view>
       <view class="stats">
@@ -28,7 +28,7 @@
     </view>
     <view class="action-row">
       <view class="profile-info">
-        <text class="nickname">{{user.display_nickname}}</text>
+        <text class="nickname">{{user.nickname}}</text>
         <text class="status">{{user.completed_profile ? '资料已完成' : '完善资料以展示更好形象'}}</text>
         <text wx:if="{{user.location}}" class="location">{{user.location}}</text>
         <text wx:if="{{user.bio}}" class="bio">{{user.bio}}</text>

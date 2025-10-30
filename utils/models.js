@@ -8,7 +8,6 @@
  * @property {string} [_id]
  * @property {string} nickname
  * @property {string} avatar
- * @property {string} display_nickname
  * @property {string} display_avatar
  * @property {boolean} completed_profile
  * @property {string} phone
@@ -47,7 +46,6 @@ function buildUser(nickname, avatar) {
   return {
     nickname: nickname || '未命名用户',
     avatar: avatar || '',
-    display_nickname: nickname || '未命名用户',
     display_avatar: avatar || '',
     completed_profile: false,
     phone: '',
@@ -98,7 +96,6 @@ const USER_FIELD_KEYS = Object.freeze([
   '_id',
   'nickname',
   'avatar',
-  'display_nickname',
   'display_avatar',
   'completed_profile',
   'phone',

@@ -20,7 +20,7 @@ Page({
           const u = users[0] || {};
           const profileStats = u.profile_stats || {};
           const display = {
-            display_nickname: u.display_nickname || u.nickname || '未命名用户',
+            nickname:  u.nickname || '未命名用户',
             display_avatar: u.display_avatar || u.avatar || '',
             completed_profile: !!u.completed_profile,
             handedness: u.handedness || '',
