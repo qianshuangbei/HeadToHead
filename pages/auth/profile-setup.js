@@ -106,11 +106,26 @@ Page({
     if (!this.data.avatarTempPath) {
       return ''; // 未选择头像
     }
-    // 如果是云存储 URL (cloud://) 或网络 URL (https://)，直接返回
-    if (this.data.avatarTempPath.startsWith('cloud://') || this.data.avatarTempPath.startsWith('https://')) {
+
+    console.log('=== uploadAvatarIfNeeded ===');
+    console.log('avatarTempPath:', this.data.avatarTempPath);
+
+    // 只有云存储 fileID (cloud://) 才直接返回，其他都需要上传
+    if (this.data.avatarTempPath.startsWith('cloud://')) {
+      console.log('Already cloud file, returning as-is');
       return this.data.avatarTempPath;
     }
-    // wxfile:// 临时文件或其他本地路径需要上传
+
+    // 检查是否是无效的路径（如 http://tmp/）
+    if (this.data.avatarTempPath.startsWith('http://tmp/') ||
+        !this.data.avatarTempPath.includes('.')) {
+      console.warn('Invalid avatar path detected, skipping upload');
+      this.setData({ error: '头像路径无效，请重新选择图片' });
+      return '';
+    }
+
+    // 所有其他路径（wxfile://, 本地路径等）都需要上传
+    console.log('Uploading file to cloud storage...');
     this.setData({ uploading: true });
     try {
       const openid = getApp().globalData.openid;
@@ -120,9 +135,11 @@ Page({
         cloudPath,
         filePath: this.data.avatarTempPath,
       });
+      console.log('Upload success, fileID:', res.fileID);
       return res.fileID;
     } catch (e) {
-      this.setData({ error: '头像上传失败' });
+      console.error('Upload failed:', e);
+      this.setData({ error: '头像上传失败: ' + (e.errMsg || e.message || '未知错误') });
       return '';
     } finally {
       this.setData({ uploading: false });

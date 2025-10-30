@@ -50,25 +50,57 @@ Page({
     this.setData({submitting: submitting});
     this.onSwitch();
   },
-  onSwitch(){
+  async onSwitch(){
     const app = getApp();
     if(this.data.submitting){
-      db.collection('users').where({ _openid: app.globalData.openid }).update({
-        data:{
-          display_nickname: this.data.nickname,
-          display_avatar: this.data.avatarUrl,
-          avatar: this.data.avatarUrl,
-          nickname: this.data.nickName,
-          completed_profile: true,
-          handedness: this.data.handedness,
-          racket_primary: this.data.racket_primary,
-          tags: this.data.tags,
-          updated_at: Date.now(),
+      try {
+        // 上传头像到云存储
+        let cloudAvatarUrl = this.data.avatarUrl;
+
+        console.log('=== onSwitch upload avatar ===');
+        console.log('Original avatarUrl:', this.data.avatarUrl);
+
+        // 如果是临时文件路径，需要上传到云存储
+        if (this.data.avatarUrl && !this.data.avatarUrl.startsWith('cloud://')) {
+          // 检查是否是无效路径
+          if (this.data.avatarUrl.startsWith('http://tmp/')) {
+            console.warn('Invalid avatar path, skipping upload');
+            wx.showToast({ title: '头像路径无效，请重新选择', icon: 'error' });
+            return;
+          }
+
+          console.log('Uploading avatar to cloud storage...');
+          const ext = this.data.avatarUrl.split('.').pop();
+          const cloudPath = `avatars/${app.globalData.openid}_${Date.now()}.${ext}`;
+          const uploadRes = await wx.cloud.uploadFile({
+            cloudPath,
+            filePath: this.data.avatarUrl,
+          });
+          cloudAvatarUrl = uploadRes.fileID;
+          console.log('Upload success, fileID:', cloudAvatarUrl);
         }
-      })
-      wx.switchTab({
-        url: '/pages/index/index',
-      })
+
+        await db.collection('users').where({ _openid: app.globalData.openid }).update({
+          data:{
+            display_nickname: this.data.nickname,
+            display_avatar: cloudAvatarUrl,
+            avatar: cloudAvatarUrl,
+            nickname: this.data.nickName,
+            completed_profile: true,
+            handedness: this.data.handedness,
+            racket_primary: this.data.racket_primary,
+            tags: this.data.tags,
+            updated_at: Date.now(),
+          }
+        });
+
+        wx.switchTab({
+          url: '/pages/index/index',
+        });
+      } catch (e) {
+        console.error('Save profile error:', e);
+        wx.showToast({ title: '保存失败: ' + (e.errMsg || e.message), icon: 'error' });
+      }
     }
   },
   async checkUser() {
