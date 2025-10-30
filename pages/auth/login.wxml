@@ -3,7 +3,7 @@
   <view class="login-icon">🎾</view>
   <text class="title">HeadToHead</text>
   <text class="subtitle"></text>
-  <button class="login-btn" bindtap="handleLogin">微信登录</button>
+  <button wx:if="{{showLoginPrompt}}" class="login-btn" bindtap="handleLogin">微信登录</button>
 </view>
 
 <!-- 可加加载状态 -->

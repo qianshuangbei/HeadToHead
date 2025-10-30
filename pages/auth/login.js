@@ -1,5 +1,6 @@
 // pages/auth/login.js
 const api = require('../../utils/api.js');
+const db = api.initCloudBase();
 Page({
   data: {
     showLoginPrompt: false,
@@ -50,7 +51,21 @@ Page({
     this.onSwitch();
   },
   onSwitch(){
+    const app = getApp();
     if(this.data.submitting){
+      db.collection('users').where({ _openid: app.globalData.openid }).update({
+        data:{
+          display_nickname: this.data.nickname,
+          display_avatar: this.data.avatarUrl,
+          avatar: this.data.avatarUrl,
+          nickname: this.data.nickName,
+          completed_profile: true,
+          handedness: this.data.handedness,
+          racket_primary: this.data.racket_primary,
+          tags: this.data.tags,
+          updated_at: Date.now(),
+        }
+      })
       wx.switchTab({
         url: '/pages/index/index',
       })
@@ -63,7 +78,6 @@ Page({
       this.waitForOpenid();
       return;
     }
-    const db = api.initCloudBase();
     try {
       const res = await db.collection('users').where({ _openid: openid }).get();
       if (res && res.data && res.data.length > 0) {
