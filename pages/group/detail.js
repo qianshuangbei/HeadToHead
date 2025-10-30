@@ -252,8 +252,17 @@ Page({
       wx.showToast({ title: '仅创建者可创建赛季', icon: 'error' });
       return;
     }
-    wx.navigateTo({
-      url: `/pages/season/create?groupId=${this.data.groupId}`
+
+    wx.showModal({
+      title: '创建新赛季',
+      content: '创建新赛季将终止当前赛季，确认要继续吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: `/pages/season/create?groupId=${this.data.groupId}`
+          });
+        }
+      }
     });
   },
 

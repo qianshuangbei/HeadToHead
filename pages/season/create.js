@@ -58,9 +58,39 @@ Page({
 
     const startTs = new Date(startDate).getTime();
     const endTs = new Date(endDate).getTime();
+    const db = api.initCloudBase();
+    const groupId = this.data.groupId;
 
-    api.createSeason(this.data.groupId, seasonName, startTs, endTs)
+    // First, get the current season and end it
+    db.collection('groups')
+      .where({ group_id: groupId })
+      .get()
+      .then(groupRes => {
+        const currentSeasonId = groupRes.data.current_season_id;
+
+        // End the current season if exists
+        const endCurrentSeasonPromise = currentSeasonId
+          ? db.collection('seasons')
+              .where({ season_id: currentSeasonId })
+              .update({ data: { status: 'ended' } })
+          : Promise.resolve();
+
+        return endCurrentSeasonPromise;
+      })
+      .then(() => {
+        // Create new season
+        return api.createSeason(groupId, seasonName, startTs, endTs);
+      })
       .then(season => {
+        // Update group's current_season_id
+        return db.collection('groups')
+          .doc(groupId)
+          .update({
+            data: { current_season_id: season._id }
+          })
+          .then(() => season);
+      })
+      .then(() => {
         wx.showToast({ title: '赛季创建成功', icon: 'success' });
         setTimeout(() => {
           wx.navigateBack();
