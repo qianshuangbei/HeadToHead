@@ -178,6 +178,19 @@ const getUserGroups = async (userId) => {
   return groupResult.data;
 };
 
+const getGroupMembers = async (groupId) => {
+  const db = initCloudBase();
+  // 获取所有成员
+  const members = await db.collection('group_members')
+    .where({
+      group_id: groupId,
+      is_active: true,
+    })
+    .get();
+  const memberIds = members.data.map(m => m.user_id);
+  return memberIds;
+}
+
 // 获取Group详情(包含成员)
 const getGroupDetail = async (groupId) => {
   const db = initCloudBase();
@@ -416,6 +429,7 @@ module.exports = {
   joinGroupByCode,
   getUserGroups,
   getGroupDetail,
+  getGroupMembers,
   createSinglesMatch,
   createDoublesMatch,
   approveSinglesMatch,

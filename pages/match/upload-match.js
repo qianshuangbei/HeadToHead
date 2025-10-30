@@ -6,6 +6,7 @@ Page({
   data: {
     groupId: '',
     seasonId: '',
+    self_id: '',
     // Match type selector
     matchTypeOptions: [
       { value: 'singles', label: '单打' },
@@ -59,23 +60,15 @@ Page({
 
   loadCurrentUser() {
     const app = getApp();
-    api.getGroupDetail(this.data.groupId)
-      .then(group => {
-        const currentUser = group.members.find(m => m.user_id === app.globalData.openid);
-        this.setData({ currentUser });
-      })
-      .catch(err => {
-        console.error('Failed to load current user:', err);
-      });
+    this.setData({self_id: app.globalData.openid});
   },
 
   loadOpponents() {
-    const app = getApp();
-    api.getGroupDetail(this.data.groupId)
-      .then(group => {
-        const opponents = group.members.filter(m => m.user_id !== app.globalData.openid);
+    api.getGroupMembers(this.data.groupId)
+      .then(members => {
+        const opponents = members.filter(m != this.data.self_id);
         this.setData({
-          opponents,
+          opponents: opponents,
           selectedOpponent: opponents.length > 0 ? opponents[0] : null
         });
       })
@@ -86,12 +79,14 @@ Page({
   },
 
   loadSeason() {
-    api.getGroupSeasons(this.data.groupId)
-      .then(seasons => {
-        const activeSeason = seasons.find(s => s.status === 'active');
-        if (activeSeason) {
-          this.setData({ seasonId: activeSeason._id });
-        }
+    const db = api.initCloudBase();
+
+    // First, get the current season and end it
+    db.collection('groups')
+      .where({ group_id: this.data.groupId })
+      .get()
+      .then(groupRes => {
+          this.setData({ seasonId: groupRes.data[0].current_season_id });
       })
       .catch(err => {
         console.error('Failed to load season:', err);
