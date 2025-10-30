@@ -50,6 +50,7 @@ page {
   border-radius: 12rpx;
   font-size: 32rpx;
   color: #333333;
+  text-align: center
 }
 
 .set-group {
@@ -156,14 +157,14 @@ page {
 .singles-match-layout {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 40rpx 20rpx;
   margin: 40rpx 0;
 }
 
 .player-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 24rpx;
 }
@@ -202,7 +203,7 @@ page {
 .vs-text {
   font-size: 32rpx;
   font-weight: bold;
-  color: #999999;
+  color: #000000;
   margin: 0 20rpx;
 }
 
@@ -214,7 +215,7 @@ page {
 .doubles-match-layout {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 40rpx 10rpx;
   margin: 40rpx 0;
 }

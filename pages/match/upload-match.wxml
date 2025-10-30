@@ -8,7 +8,6 @@
   <view class="form-container">
     <!-- 比赛类型选择 -->
     <view class="form-group">
-      <label class="form-label">比赛类型</label>
       <picker
         bindchange="onMatchTypeChange"
         value="{{selectedMatchTypeIndex}}"
@@ -23,21 +22,6 @@
 
     <!-- 单打模式 -->
     <view wx:if="{{selectedMatchType === 'singles'}}" class="singles-section">
-      <!-- 对手选择 -->
-      <view class="form-group">
-        <label class="form-label">对手</label>
-        <picker
-          bindchange="onOpponentChange"
-          value="{{selectedOpponentIndex}}"
-          range="{{opponents}}"
-          range-key="nickname"
-        >
-          <view class="picker">
-            {{selectedOpponent ? selectedOpponent.nickname : '选择对手'}}
-          </view>
-        </picker>
-      </view>
-
       <!-- 单打比分输入 - 头像 vs 头像 -->
       <view class="singles-match-layout">
         <!-- 玩家A（当前用户） -->
@@ -180,7 +164,6 @@
 
     <!-- 比赛日期 -->
     <view class="form-group">
-      <label class="form-label">比赛日期</label>
       <picker mode="date" value="{{matchDate}}" bindchange="onDateChange">
         <view class="picker">
           {{matchDate || '选择日期'}}

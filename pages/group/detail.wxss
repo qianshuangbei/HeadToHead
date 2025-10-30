@@ -49,6 +49,7 @@ page {
   font-size: 12px;
   padding: 0;
   border-radius: 6px;
+  margin-left: 50%;
 }
 
 /* ===== 标签栏 ===== */
