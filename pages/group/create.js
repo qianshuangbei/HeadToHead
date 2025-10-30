@@ -83,7 +83,7 @@ Page({
           const endTime = new Date(form.endDate).getTime();
 
           return api.createSeason(
-            group._id,
+            group.correlated_id,
             form.seasonName,
             startTime,
             endTime

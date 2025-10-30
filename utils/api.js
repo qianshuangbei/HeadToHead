@@ -84,11 +84,11 @@ const generateAccessCode = () => {
 // 创建Group
 const createGroup = async (creatorId, groupData) => {
   const db = initCloudBase();
-
+  var group_correlated_id = generateGuid();
   const newGroup = buildGroup(
     groupData.name,
     groupData.description,
-    generateGuid(),
+    group_correlated_id,
     creatorId,
     groupData.season_enabled,
     generateAccessCode()
@@ -98,7 +98,7 @@ const createGroup = async (creatorId, groupData) => {
 
   // 同时添加创建者为成员
   await addDoc('group_members', {
-      group_id: result._id,
+      group_id: group_correclated_id,
       user_id: creatorId,
       joined_at: Date.now(),
       role: 'creator',
@@ -171,7 +171,7 @@ const getUserGroups = async (userId) => {
 
   const groupResult = await db.collection('groups')
     .where({
-      _id: db.command.in(groupIds)
+      correlated_id: db.command.in(groupIds)
     })
     .get();
 
@@ -367,8 +367,10 @@ const getCurrentRanking = async (groupId) => {
 
 // 创建赛季
 const createSeason = async (groupId, seasonName, startDate, endDate) => {
+  var season_id = generateGuid();
   const newSeason = {
     group_id: groupId,
+    season_id: season_id,
     season_name: seasonName,
     status: 'pending',
     start_date: startDate,
@@ -384,11 +386,11 @@ const createSeason = async (groupId, seasonName, startDate, endDate) => {
 
   // 更新Group的当前赛季
   await updateDoc('groups', groupId, {
-      current_season_id: result._id,
+      current_season_id: season_id,
       updated_at: Date.now(),
     });
 
-  return { ...newSeason, _id: result._id };
+  return { ...newSeason, _id: season_id };
 };
 
 // 获取Group的所有赛季

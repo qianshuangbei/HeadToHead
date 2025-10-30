@@ -73,7 +73,7 @@ function buildGroup(name, description, id, creatorId, seasonEnabled, accessCode)
   const now = Date.now();
   return {
     name,
-    _openid: id,
+    correlated_id: id,
     description: description || '',
     creator_id: creatorId,
     access_code: accessCode || generateAccessCodePlaceholder(),
