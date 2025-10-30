@@ -52,7 +52,6 @@ Page({
   },
 
   goEditProfile() {
-    // 进入同一个资料设置页复用逻辑
     wx.navigateTo({ url: '/pages/auth/profile-setup?edit=1' });
   },
 });

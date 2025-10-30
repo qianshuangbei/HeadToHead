@@ -1,9 +1,12 @@
 /* pages/profile/index.wxss */
+page {
+  background-color: #f5f5f5;
+}
 
 .profile-container {
   min-height: 100vh;
-  padding: 40rpx 30rpx 60rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0rpx 0rpx 60rpx;
+  background-color: #f5f5f5;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -12,8 +15,10 @@
 
 .top-section {
   display: flex;
-  align-items: center;
-  gap: 60rpx;
+  align-items:baseline;
+  padding: 24px 24px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  gap: 24rpx;
 }
 
 .avatar-wrapper {
@@ -22,7 +27,7 @@
   border-radius: 50%;
   border: 6rpx solid rgba(102, 126, 234, 0.45);
   padding: 6rpx;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,7 +87,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 20rpx;
+  padding: 0rpx 20rpx 60rpx;
 }
 
 .nickname {
@@ -93,7 +99,8 @@
 
 .status {
   font-size: 26rpx;
-  color: #777;
+  font-weight: 700;
+  color: #222;
 }
 
 .location {
