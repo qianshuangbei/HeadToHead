@@ -45,7 +45,7 @@ Page({
 
         setTimeout(() => {
           wx.navigateTo({
-            url: `/pages/group/detail?groupId=${group._id}`
+            url: `/pages/group/detail?groupId=${group.group_id}`
           });
         }, 500);
       })

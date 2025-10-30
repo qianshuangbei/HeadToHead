@@ -84,11 +84,11 @@ const generateAccessCode = () => {
 // 创建Group
 const createGroup = async (creatorId, groupData) => {
   const db = initCloudBase();
-  var group_correlated_id = generateGuid();
+  var group_id = generateGuid();
   const newGroup = buildGroup(
     groupData.name,
     groupData.description,
-    group_correlated_id,
+    group_id,
     creatorId,
     groupData.season_enabled,
     generateAccessCode()
@@ -98,14 +98,14 @@ const createGroup = async (creatorId, groupData) => {
 
   // 同时添加创建者为成员
   await addDoc('group_members', {
-      group_id: group_correclated_id,
+      group_id: group_id,
       user_id: creatorId,
       joined_at: Date.now(),
       role: 'creator',
       is_active: true,
     });
 
-  return { ...newGroup, _id: result._id };
+  return { ...newGroup};
 };
 
 // 通过分享码加入Group
@@ -126,7 +126,7 @@ const joinGroupByCode = async (userId, accessCode) => {
   // 检查是否已经是成员
   const memberResult = await db.collection('group_members')
     .where({
-      group_id: group._id,
+      group_id: group.group_id,
       user_id: userId,
       is_active: true,
     })
@@ -138,7 +138,7 @@ const joinGroupByCode = async (userId, accessCode) => {
 
   // 添加为成员
   await addDoc('group_members', {
-      group_id: group._id,
+      group_id: group.group_id,
       user_id: userId,
       joined_at: Date.now(),
       role: 'member',
@@ -146,7 +146,7 @@ const joinGroupByCode = async (userId, accessCode) => {
     });
 
   // 更新Group的成员数
-  await updateDoc('groups', group._id, {
+  await updateDoc('groups', group._openid, {
       member_count: db.command.inc(1),
       updated_at: Date.now(),
     });
@@ -171,7 +171,7 @@ const getUserGroups = async (userId) => {
 
   const groupResult = await db.collection('groups')
     .where({
-      correlated_id: db.command.in(groupIds)
+      group_id: db.command.in(groupIds)
     })
     .get();
 
@@ -182,7 +182,7 @@ const getUserGroups = async (userId) => {
 const getGroupDetail = async (groupId) => {
   const db = initCloudBase();
 
-  const group = await db.collection('groups').doc(groupId).get();
+  const group = await db.collection('groups').where({group_id: groupId}).get();
 
   if (!group.data) {
     throw new Error('Group不存在');
@@ -200,7 +200,7 @@ const getGroupDetail = async (groupId) => {
   const memberIds = members.data.map(m => m.user_id);
   const usersResult = await db.collection('users')
     .where({
-      _id: db.command.in(memberIds)
+      _openid: db.command.in(memberIds)
     })
     .get();
 

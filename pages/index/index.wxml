@@ -24,7 +24,7 @@
     <!-- Group列表 -->
     <view class="group-list" wx:if="{{groups.length > 0}}">
       <view class="section-title">我的Group</view>
-      <view class="group-item" wx:for="{{groups}}" wx:key="_id" bindtap="handleSelectGroup" data-group-id="{{item._id}}">
+      <view class="group-item" wx:for="{{groups}}" wx:key="_id" bindtap="handleSelectGroup" data-group-id="{{item.group_id}}">
         <view class="group-info">
           <text class="group-name">{{item.name}}</text>
           <text class="group-desc">{{item.member_count}}个成员</text>

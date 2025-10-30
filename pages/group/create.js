@@ -83,7 +83,7 @@ Page({
           const endTime = new Date(form.endDate).getTime();
 
           return api.createSeason(
-            group.correlated_id,
+            group.group_id,
             form.seasonName,
             startTime,
             endTime
@@ -99,7 +99,7 @@ Page({
 
         setTimeout(() => {
           wx.navigateTo({
-            url: `/pages/group/detail?groupId=${group._id}`
+            url: `/pages/group/detail?groupId=${group.group_id}`
           });
         }, 500);
       })

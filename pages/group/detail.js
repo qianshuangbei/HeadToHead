@@ -34,7 +34,7 @@ Page({
   loadGroupDetail() {
     api.getGroupDetail(this.data.groupId)
       .then(group => {
-        this.setData({ group });
+        this.setData({ group: group[0] });
       })
       .catch(err => {
         console.error('Failed to load group details:', err);
