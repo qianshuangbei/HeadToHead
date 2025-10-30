@@ -66,7 +66,7 @@ Page({
       .where({ group_id: groupId })
       .get()
       .then(groupRes => {
-        const currentSeasonId = groupRes.data.current_season_id;
+        const currentSeasonId = groupRes.data[0].current_season_id;
 
         // End the current season if exists
         const endCurrentSeasonPromise = currentSeasonId

@@ -12,7 +12,8 @@
     "pages/match/history",
     "pages/profile/index",
     "pages/ranking/detail",
-    "pages/challenge/index"
+    "pages/challenge/index",
+    "pages/season/create"
   ],
   "window": {
     "backgroundTextStyle": "light",

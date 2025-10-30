@@ -372,7 +372,7 @@ const createSeason = async (groupId, seasonName, startDate, endDate) => {
     group_id: groupId,
     season_id: season_id,
     season_name: seasonName,
-    status: 'pending',
+    status: 'active',
     start_date: startDate,
     end_date: endDate,
     duration_days: Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)),

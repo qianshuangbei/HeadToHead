@@ -3,6 +3,7 @@ const api = require('../../utils/api.js');
 
 Page({
   data: {
+    openid: '',
     groupId: '',
     group: {},
     activeTab: 'ranking',
@@ -15,11 +16,13 @@ Page({
   },
 
   onLoad(options) {
+    const app = getApp();
+    const openid = app.globalData.openid;
     const pages = getCurrentPages();
     const prevPage = pages.length > 1 ? pages[pages.length - 2] : null;
     this.previousRoute = prevPage ? prevPage.route : '';
 
-    this.setData({ groupId: options.groupId });
+    this.setData({ groupId: options.groupId, openid: openid });
     this.loadGroupDetail();
     this.loadSeasons();
     this.loadRankings();
@@ -28,7 +31,7 @@ Page({
   },
 
   onShow() {
-    this.loadGroupDetail();
+    this.loadSeasons();
     this.loadMatches();
     this.loadMembers();
   },
@@ -246,13 +249,6 @@ Page({
 
   // Navigate to create season page (creator only)
   handleCreateSeason() {
-    const app = getApp();
-    const creatorId = this.data.group.creator_id;
-    if (app.globalData.openid !== creatorId) {
-      wx.showToast({ title: '仅创建者可创建赛季', icon: 'error' });
-      return;
-    }
-
     wx.showModal({
       title: '创建新赛季',
       content: '创建新赛季将终止当前赛季，确认要继续吗？',

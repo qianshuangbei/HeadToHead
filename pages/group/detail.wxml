@@ -97,11 +97,11 @@
   <!-- 成员标签页 -->
   <view class="tab-content" wx:if="{{activeTab === 'members'}}">
     <view class="members-list">
-      <view class="member-item" wx:for="{{group.members}}" wx:key="user_id">
-        <image class="avatar" src="{{item.userInfo.avatar}}" mode="aspectFill"></image>
+      <view class="member-item" wx:for="{{members}}" wx:key="user_id">
+        <image class="avatar" src="{{item.display_avatar}}" mode="aspectFill"></image>
         <view class="member-info">
-          <text class="name">{{item.userInfo.nickname}}</text>
-          <text class="role">{{item.role === 'creator' ? '创建者' : '成员'}}</text>
+          <text class="name">{{item.nickname}}</text>
+          <text class="role">{{item.isCreator ? '创建者' : '成员'}}</text>
         </view>
       </view>
     </view>
@@ -109,7 +109,7 @@
 
   <!-- 底部操作按钮 -->
   <view class="bottom-actions">
-    <button class="btn btn-primary" wx:if="{{group.creator_id === getApp().globalData.openid}}" bindtap="handleCreateSeason">创建新赛季</button>
+    <button class="btn btn-primary" wx:if="{{group.creator_id == openid}}" bindtap="handleCreateSeason">创建新赛季</button>
     <button class="btn btn-danger" bindtap="handleLeaveGroup">退出Group</button>
   </view>
 </view>
