@@ -1,42 +1,74 @@
 <!--pages/auth/profile-setup.wxml-->
-<view class="container">
-  <view class="field">
-    <text class="label">头像</text>
-    <image wx:if="{{avatarTempPath}}" src="{{avatarTempPath}}" class="avatar" mode="aspectFill" />
-    <button size="mini" bindtap="selectAvatar">选择头像</button>
-  </view>
-
-  <view class="field">
-    <text class="label">昵称</text>
-    <input placeholder="输入昵称" value="{{nickname}}" bindinput="onNicknameInput" maxlength="16" />
-  </view>
-
-  <view class="field">
-    <text class="label">持拍手</text>
-    <radio-group bindchange="onHandednessChange">
-      <label><radio value="left" checked="{{handedness==='left'}}" /> 左手</label>
-      <label style="margin-left:16px"><radio value="right" checked="{{handedness==='right'}}" /> 右手</label>
-    </radio-group>
-  </view>
-
-  <view class="field">
-    <text class="label">主力球拍</text>
-    <input placeholder="例如: Babolat Pure Drive" value="{{racket_primary}}" bindinput="onRacketInput" maxlength="40" />
-  </view>
-
-  <view class="field">
-    <text class="label">个人标签 (最多20, 每个≤12字)</text>
-    <input placeholder="输入标签后回车添加" value="{{tagInput}}" bindconfirm="onTagConfirm" bindinput="onTagInput" />
-    <view class="tags">
-      <block wx:for="{{tags}}" wx:key="index">
-        <view class="tag">
-          <text>{{item}}</text>
-          <text class="remove" data-index="{{index}}" bindtap="removeTag">×</text>
+<view class="profile-edit-page">
+  <scroll-view scroll-y="true" class="edit-scroll" enable-back-to-top="true">
+    <view class="hero">
+      <view class="avatar-panel" bindtap="selectAvatar">
+        <image wx:if="{{avatarTempPath}}" class="avatar" src="{{avatarTempPath}}" mode="aspectFill" />
+        <view wx:else class="avatar-placeholder">
+          <text>上传头像</text>
         </view>
-      </block>
+        <view class="avatar-overlay">
+          <text>更换头像</text>
+        </view>
+      </view>
     </view>
-  </view>
 
-  <view wx:if="{{error}}" class="error">{{error}}</view>
-  <button type="primary" loading="{{saving}}" bindtap="saveProfile">完成并进入</button>
+    <view class="form-card">
+      <view class="section">
+        <text class="section-title">基本信息</text>
+        <view class="form-item">
+          <text class="item-label">名字</text>
+          <input class="item-input" placeholder="展示给其他球友的名字" value="{{nickname}}" bindinput="onNicknameInput" maxlength="16" />
+        </view>
+        <view class="form-item">
+          <text class="item-label">个人简介</text>
+          <textarea class="item-textarea" placeholder="写点你的网球故事或风格吧" value="{{bio}}" maxlength="120" bindinput="onBioInput" auto-height="true"/>
+          <text class="char-count">{{bioLength}}/120</text>
+        </view>
+      </view>
+
+      <view class="section">
+        <text class="section-title">球场信息</text>
+        <view class="form-item">
+          <text class="item-label">持拍手</text>
+          <radio-group class="segment" bindchange="onHandednessChange">
+            <label class="segment-option {{handedness==='left' ? 'active' : ''}}">
+              <radio value="left" checked="{{handedness==='left'}}" />
+              <text>左手</text>
+            </label>
+            <label class="segment-option {{handedness==='right' ? 'active' : ''}}">
+              <radio value="right" checked="{{handedness==='right'}}" />
+              <text>右手</text>
+            </label>
+          </radio-group>
+        </view>
+        <view class="form-item">
+          <text class="item-label">惯用球拍</text>
+          <input class="item-input" placeholder="例如：Babolat Pure Drive" value="{{racket_primary}}" bindinput="onRacketInput" maxlength="40" />
+        </view>
+      </view>
+
+      <view class="section">
+        <view class="form-item tags-item">
+          <text class="item-label">个人标签 (最多20, 每个≤12字)</text>
+          <input class="item-input" placeholder="输入标签后回车添加" value="{{tagInput}}" bindconfirm="onTagConfirm" bindinput="onTagInput" />
+          <view class="tags" wx:if="{{tags.length}}">
+            <block wx:for="{{tags}}" wx:key="index">
+              <view class="tag">
+                <text class="tag-text">#{{item}}</text>
+                <text class="tag-remove" data-index="{{index}}" bindtap="removeTag">删除</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{error}}" class="error">
+      <text>{{error}}</text>
+    </view>
+    <view class="actions">
+      <button class="save-btn" loading="{{saving}}" bindtap="saveProfile">保存资料</button>
+    </view>
+  </scroll-view>
 </view>

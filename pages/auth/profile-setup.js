@@ -5,6 +5,8 @@ Page({
     mode: '', // wechat | custom
     nickname: '',
     avatarTempPath: '',
+    bio: '',
+    bioLength: 0,
     handedness: '', // left | right
     racket_primary: '',
     tagInput: '',
@@ -56,6 +58,11 @@ Page({
           mode: info.completed_profile ? 'custom' : this.data.mode,
           nickname: this.data.nickname || info.display_nickname || info.nickname || '',
           avatarTempPath: this.data.avatarTempPath || info.display_avatar || info.avatar || '',
+          bio: info.bio || '',
+          bioLength: (info.bio || '').length,
+          handedness: info.handedness || this.data.handedness,
+          racket_primary: info.racket_primary || this.data.racket_primary,
+          tags: info.tags || this.data.tags,
         });
       }
     }
@@ -63,6 +70,11 @@ Page({
 
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value });
+  },
+
+  onBioInput(e) {
+    const value = e.detail.value || '';
+    this.setData({ bio: value, bioLength: value.length });
   },
 
   onHandednessChange(e) {
@@ -159,10 +171,11 @@ Page({
     const db = wx.cloud.database();
     try {
       const displayAvatar = await this.uploadAvatarIfNeeded();
-      await db.collection('users').where({ _openid: openid}).update({ 
+      await db.collection('users').where({ _openid: openid}).update({
         data:{
           display_nickname: this.data.nickname,
           display_avatar: displayAvatar,
+          bio: this.data.bio,
           completed_profile: true,
           handedness: this.data.handedness,
           racket_primary: this.data.racket_primary,
@@ -174,6 +187,7 @@ Page({
         ...app.globalData.userInfo,
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
+        bio: this.data.bio,
         completed_profile: true,
         handedness: this.data.handedness,
         racket_primary: this.data.racket_primary,
@@ -183,6 +197,7 @@ Page({
       wx.setStorageSync('cachedUserInfo', {
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
+        bio: this.data.bio,
         handedness: this.data.handedness,
         racket_primary: this.data.racket_primary,
         tags: this.data.tags,
