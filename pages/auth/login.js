@@ -62,13 +62,6 @@ Page({
 
         // 如果是临时文件路径，需要上传到云存储
         if (this.data.avatarUrl && !this.data.avatarUrl.startsWith('cloud://')) {
-          // 检查是否是无效路径
-          if (this.data.avatarUrl.startsWith('http://tmp/')) {
-            console.warn('Invalid avatar path, skipping upload');
-            wx.showToast({ title: '头像路径无效，请重新选择', icon: 'error' });
-            return;
-          }
-
           console.log('Uploading avatar to cloud storage...');
           const ext = this.data.avatarUrl.split('.').pop();
           const cloudPath = `avatars/${app.globalData.openid}_${Date.now()}.${ext}`;
