@@ -110,11 +110,24 @@ Page({
   },
 
   onOpponentChange(e) {
+    console.log('=== onOpponentChange START ===');
     const index = parseInt(e.detail.value);
+    console.log('Selected index:', index);
+    console.log('Total opponents:', this.data.opponents.length);
+    console.log('Opponent at index:', JSON.stringify(this.data.opponents[index], null, 2));
+
     this.setData({
       selectedOpponentIndex: index,
       selectedOpponent: this.data.opponents[index]
     });
+
+    console.log('=== After setData ===');
+    console.log('selectedOpponent:', JSON.stringify(this.data.selectedOpponent, null, 2));
+    console.log('Has display_avatar?', !!this.data.selectedOpponent.display_avatar);
+    console.log('display_avatar value:', this.data.selectedOpponent.display_avatar);
+    console.log('Has nickname?', !!this.data.selectedOpponent.nickname);
+    console.log('nickname value:', this.data.selectedOpponent.nickname);
+    console.log('=== onOpponentChange END ===');
   },
 
   // 双打模式玩家选择

@@ -63,7 +63,7 @@
             <view class="avatar-container clickable">
               <image
                 class="avatar"
-                src="{{selectedOpponent && selectedOpponent.avatar ? selectedOpponent.avatar : '/images/default-avatar.png'}}"
+                src="{{selectedOpponent && selectedOpponent.display_avatar ? selectedOpponent.display_avatar : '/images/default-avatar.png'}}"
                 mode="aspectFill"
               />
               <view wx:if="{{!selectedOpponent}}" class="avatar-placeholder">
@@ -86,7 +86,7 @@
             <view class="avatar-container">
               <image
                 class="avatar"
-                src="{{currentUser && currentUser.avatar ? currentUser.avatar : '/images/default-avatar.png'}}"
+                src="{{currentUser && currentUser.display_avatar ? currentUser.display_avatar : '/images/default-avatar.png'}}"
                 mode="aspectFill"
               />
             </view>
@@ -100,7 +100,7 @@
               <view class="avatar-container clickable">
                 <image
                   class="avatar"
-                  src="{{playerB && playerB.avatar ? playerB.avatar : '/images/default-avatar.png'}}"
+                  src="{{playerB && playerB.display_avatar ? playerB.display_avatar : '/images/default-avatar.png'}}"
                   mode="aspectFill"
                 />
                 <view wx:if="{{!playerB}}" class="avatar-placeholder">
@@ -141,7 +141,7 @@
               <view class="avatar-container clickable">
                 <image
                   class="avatar"
-                  src="{{playerC && playerC.avatar ? playerC.avatar : '/images/default-avatar.png'}}"
+                  src="{{playerC && playerC.display_avatar ? playerC.display_avatar : '/images/default-avatar.png'}}"
                   mode="aspectFill"
                 />
                 <view wx:if="{{!playerC}}" class="avatar-placeholder">
@@ -159,7 +159,7 @@
               <view class="avatar-container clickable">
                 <image
                   class="avatar"
-                  src="{{playerD && playerD.avatar ? playerD.avatar : '/images/default-avatar.png'}}"
+                  src="{{playerD && playerD.display_avatar ? playerD.display_avatar : '/images/default-avatar.png'}}"
                   mode="aspectFill"
                 />
                 <view wx:if="{{!playerD}}" class="avatar-placeholder">
