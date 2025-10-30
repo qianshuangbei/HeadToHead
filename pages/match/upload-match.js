@@ -6,9 +6,25 @@ Page({
   data: {
     groupId: '',
     seasonId: '',
+    // Match type selector
+    matchTypeOptions: [
+      { value: 'singles', label: '单打' },
+      { value: 'doubles', label: '双打' }
+    ],
+    selectedMatchTypeIndex: 0,
+    selectedMatchType: 'singles',
+    // Current user info
+    currentUser: null,
     opponents: [],
     selectedOpponentIndex: 0,
     selectedOpponent: null,
+    // Doubles mode players
+    playerB: null,  // 队友
+    playerC: null,  // 对手1
+    playerD: null,  // 对手2
+    playerBIndex: 0,
+    playerCIndex: 0,
+    playerDIndex: 0,
     // Simplified single-score inputs
     score_a: '',
     score_b: '',
@@ -30,6 +46,7 @@ Page({
   onLoad(options) {
     this.setData({ groupId: options.groupId });
     this.setDefaultDate();
+    this.loadCurrentUser();
     this.loadOpponents();
     this.loadSeason();
   },
@@ -38,6 +55,18 @@ Page({
     const today = new Date();
     const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     this.setData({ matchDate: dateStr });
+  },
+
+  loadCurrentUser() {
+    const app = getApp();
+    api.getGroupDetail(this.data.groupId)
+      .then(group => {
+        const currentUser = group.members.find(m => m.user_id === app.globalData.openid);
+        this.setData({ currentUser });
+      })
+      .catch(err => {
+        console.error('Failed to load current user:', err);
+      });
   },
 
   loadOpponents() {
@@ -70,11 +99,44 @@ Page({
       });
   },
 
+  onMatchTypeChange(e) {
+    const index = parseInt(e.detail.value);
+    this.setData({
+      selectedMatchTypeIndex: index,
+      selectedMatchType: this.data.matchTypeOptions[index].value
+    });
+  },
+
   onOpponentChange(e) {
     const index = parseInt(e.detail.value);
     this.setData({
       selectedOpponentIndex: index,
       selectedOpponent: this.data.opponents[index]
+    });
+  },
+
+  // 双打模式玩家选择
+  onPlayerBChange(e) {
+    const index = parseInt(e.detail.value);
+    this.setData({
+      playerBIndex: index,
+      playerB: this.data.opponents[index]
+    });
+  },
+
+  onPlayerCChange(e) {
+    const index = parseInt(e.detail.value);
+    this.setData({
+      playerCIndex: index,
+      playerC: this.data.opponents[index]
+    });
+  },
+
+  onPlayerDChange(e) {
+    const index = parseInt(e.detail.value);
+    this.setData({
+      playerDIndex: index,
+      playerD: this.data.opponents[index]
     });
   },
 

@@ -1,1 +1,258 @@
-/* pages/match/upload-singles.wxss */
+/* pages/match/upload-match.wxss */
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 顶部渐变装饰区域 */
+.header-gradient {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 60rpx 40rpx 80rpx;
+  border-radius: 0 0 40rpx 40rpx;
+  box-shadow: 0 10rpx 30rpx rgba(102, 126, 234, 0.3);
+}
+
+.form-title {
+  font-size: 52rpx;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  background-color: #ffffff;
+  margin: -40rpx 32rpx 32rpx;
+  padding: 40rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 32rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.picker {
+  padding: 24rpx 32rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.set-group {
+  margin-bottom: 20rpx;
+}
+
+.set-label {
+  display: block;
+  font-size: 28rpx;
+  color: #888888;
+  margin-bottom: 12rpx;
+}
+
+.score-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-input input {
+  width: 120rpx;
+  height: 80rpx;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+}
+
+.separator {
+  margin: 0 20rpx;
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.tag {
+  padding: 16rpx 32rpx;
+  background-color: #f5f5f5;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.tag.active {
+  background-color: #1989fa;
+  color: #ffffff;
+}
+
+.info-box {
+  background-color: #fff4e5;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  margin: 40rpx 0;
+}
+
+.info-box text {
+  font-size: 28rpx;
+  color: #ff9500;
+  line-height: 1.6;
+}
+
+.button-group {
+  margin-top: 60rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #1989fa;
+  color: #ffffff;
+}
+
+.btn-primary[disabled] {
+  background-color: #cccccc;
+  color: #999999;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: #666666;
+  border: 2rpx solid #e5e5e5;
+}
+
+/* 单打模式样式 */
+.singles-section {
+  margin-top: 40rpx;
+}
+
+.singles-match-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40rpx 20rpx;
+  margin: 40rpx 0;
+}
+
+.player-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.avatar-container {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(102, 126, 234, 0.45);
+  padding: 4rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+.score-box {
+  width: 120rpx;
+  height: 120rpx;
+  background-color: #f5f5f5;
+  border-radius: 16rpx;
+  text-align: center;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333333;
+  border: 2rpx solid #e5e5e5;
+}
+
+.vs-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #999999;
+  margin: 0 20rpx;
+}
+
+/* 双打模式样式 */
+.doubles-section {
+  margin-top: 40rpx;
+}
+
+.doubles-match-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40rpx 10rpx;
+  margin: 40rpx 0;
+}
+
+.team-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.avatars-group {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+/* 可点击头像框样式 */
+.avatar-container.clickable {
+  position: relative;
+  cursor: pointer;
+}
+
+.avatar-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+}
+
+.plus-icon {
+  font-size: 48rpx;
+  color: #667eea;
+  font-weight: 300;
+}

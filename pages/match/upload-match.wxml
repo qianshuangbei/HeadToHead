@@ -1,25 +1,185 @@
-<!--pages/match/upload-singles.wxml-->
+<!--pages/match/upload-match.wxml-->
 <view class="container">
-  <view class="form-container">
-    <view class="form-title">上传单打比赛</view>
+  <!-- 顶部渐变装饰区域 -->
+  <view class="header-gradient">
+    <view class="form-title">上传比赛</view>
+  </view>
 
-    <!-- 对手选择 -->
+  <view class="form-container">
+    <!-- 比赛类型选择 -->
     <view class="form-group">
-      <label class="form-label">对手</label>
+      <label class="form-label">比赛类型</label>
       <picker
-        bindchange="onOpponentChange"
-        value="{{selectedOpponentIndex}}"
-        range="{{opponents}}"
-        range-key="nickname"
+        bindchange="onMatchTypeChange"
+        value="{{selectedMatchTypeIndex}}"
+        range="{{matchTypeOptions}}"
+        range-key="label"
       >
         <view class="picker">
-          {{selectedOpponent ? selectedOpponent.nickname : '选择对手'}}
+          {{matchTypeOptions[selectedMatchTypeIndex].label}}
         </view>
       </picker>
     </view>
 
-    <!-- 比分输入 -->
-    <view class="form-group">
+    <!-- 单打模式 -->
+    <view wx:if="{{selectedMatchType === 'singles'}}" class="singles-section">
+      <!-- 对手选择 -->
+      <view class="form-group">
+        <label class="form-label">对手</label>
+        <picker
+          bindchange="onOpponentChange"
+          value="{{selectedOpponentIndex}}"
+          range="{{opponents}}"
+          range-key="nickname"
+        >
+          <view class="picker">
+            {{selectedOpponent ? selectedOpponent.nickname : '选择对手'}}
+          </view>
+        </picker>
+      </view>
+
+      <!-- 单打比分输入 - 头像 vs 头像 -->
+      <view class="singles-match-layout">
+        <!-- 玩家A（当前用户） -->
+        <view class="player-section">
+          <view class="avatar-container">
+            <image
+              class="avatar"
+              src="{{currentUser && currentUser.avatar ? currentUser.avatar : '/images/default-avatar.png'}}"
+              mode="aspectFill"
+            />
+          </view>
+          <input
+            class="score-box"
+            type="number"
+            placeholder="0"
+            value="{{score_a}}"
+            bindinput="onScoreAInput"
+          />
+        </view>
+
+        <!-- VS 文字 -->
+        <view class="vs-text">VS</view>
+
+        <!-- 玩家B（对手） -->
+        <view class="player-section">
+          <input
+            class="score-box"
+            type="number"
+            placeholder="0"
+            value="{{score_b}}"
+            bindinput="onScoreBInput"
+          />
+          <view class="avatar-container">
+            <image
+              class="avatar"
+              src="{{selectedOpponent && selectedOpponent.avatar ? selectedOpponent.avatar : '/images/default-avatar.png'}}"
+              mode="aspectFill"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 双打模式 -->
+    <view wx:if="{{selectedMatchType === 'doubles'}}" class="doubles-section">
+      <!-- 双打比分输入 - 2个头像 vs 2个头像 -->
+      <view class="doubles-match-layout">
+        <!-- 队伍A（包含当前用户） -->
+        <view class="team-section">
+          <view class="avatars-group">
+            <!-- 玩家A1（当前用户） -->
+            <view class="avatar-container">
+              <image
+                class="avatar"
+                src="{{currentUser && currentUser.avatar ? currentUser.avatar : '/images/default-avatar.png'}}"
+                mode="aspectFill"
+              />
+            </view>
+            <!-- 玩家B（队友） - 可点击选择 -->
+            <picker
+              bindchange="onPlayerBChange"
+              value="{{playerBIndex}}"
+              range="{{opponents}}"
+              range-key="nickname"
+            >
+              <view class="avatar-container clickable">
+                <image
+                  class="avatar"
+                  src="{{playerB && playerB.avatar ? playerB.avatar : '/images/default-avatar.png'}}"
+                  mode="aspectFill"
+                />
+                <view wx:if="{{!playerB}}" class="avatar-placeholder">
+                  <text class="plus-icon">+</text>
+                </view>
+              </view>
+            </picker>
+          </view>
+          <input
+            class="score-box"
+            type="number"
+            placeholder="0"
+            value="{{score_a}}"
+            bindinput="onScoreAInput"
+          />
+        </view>
+
+        <!-- VS 文字 -->
+        <view class="vs-text">VS</view>
+
+        <!-- 队伍B（对手队伍） -->
+        <view class="team-section">
+          <input
+            class="score-box"
+            type="number"
+            placeholder="0"
+            value="{{score_b}}"
+            bindinput="onScoreBInput"
+          />
+          <view class="avatars-group">
+            <!-- 玩家C - 可点击选择 -->
+            <picker
+              bindchange="onPlayerCChange"
+              value="{{playerCIndex}}"
+              range="{{opponents}}"
+              range-key="nickname"
+            >
+              <view class="avatar-container clickable">
+                <image
+                  class="avatar"
+                  src="{{playerC && playerC.avatar ? playerC.avatar : '/images/default-avatar.png'}}"
+                  mode="aspectFill"
+                />
+                <view wx:if="{{!playerC}}" class="avatar-placeholder">
+                  <text class="plus-icon">+</text>
+                </view>
+              </view>
+            </picker>
+            <!-- 玩家D - 可点击选择 -->
+            <picker
+              bindchange="onPlayerDChange"
+              value="{{playerDIndex}}"
+              range="{{opponents}}"
+              range-key="nickname"
+            >
+              <view class="avatar-container clickable">
+                <image
+                  class="avatar"
+                  src="{{playerD && playerD.avatar ? playerD.avatar : '/images/default-avatar.png'}}"
+                  mode="aspectFill"
+                />
+                <view wx:if="{{!playerD}}" class="avatar-placeholder">
+                  <text class="plus-icon">+</text>
+                </view>
+              </view>
+            </picker>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 旧的比分输入区域（保留用于其他功能） -->
+    <view wx:if="{{false}}" class="form-group">
       <label class="form-label">比分</label>
 
       <!-- 第一盘 -->
@@ -87,6 +247,7 @@
           />
         </view>
       </view>
+    </view>
     </view>
 
     <!-- 比赛日期 -->
