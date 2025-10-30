@@ -52,6 +52,6 @@ Page({
   },
 
   goEditProfile() {
-    wx.navigateTo({ url: '/pages/auth/profile-setup?edit=1' });
+    wx.navigateTo({ url: '/pages/auth/profile-setup' });
   },
 });

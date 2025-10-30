@@ -16,55 +16,20 @@ Page({
     error: '',
   },
 
-  // 已迁移到登录页底部浮层，不再使用
-  chooseWeChatProfile() {
-    this.setData({ mode: 'wechat', error: '' });
-    wx.getUserProfile({
-      desc: '获取头像和昵称',
-      success: (res) => {
-        const userInfo = res.userInfo;
-        this.setData({ nickname: userInfo.nickName, avatarTempPath: userInfo.avatarUrl, step: 'editing' });
-      },
-      fail: () => {
-        this.setData({ error: '微信授权失败，可手动填写' });
-      }
-    });
-  },
-
-  // 已迁移到登录页底部浮层，不再使用
-  chooseCustomProfile() {
-    this.setData({ mode: 'custom', step: 'editing', error: '' });
-  },
-
   onLoad(options) {
     const app = getApp();
-    // 接收登录页传入的 mode (wechat | custom)
-    if (options && options.mode) {
-      const info = app.globalData.userInfo || {};
-      if (options.mode === 'wechat') {
-        this.setData({
-          nickname: info.nickName || info.nickname || '',
-          avatarTempPath: info.avatarUrl || info.avatar || '',
-        });
-      } else if (options.mode === 'custom') {
-        this.setData({ nickname: '', avatarTempPath: '' });
-      }
-    }
-    // 编辑模式额外预填（保留原逻辑）
-    if (options && options.edit === '1') {
-      const info = app.globalData.userInfo;
-      if (info) {
-        this.setData({
-          mode: info.completed_profile ? 'custom' : this.data.mode,
-          nickname: this.data.nickname || info.display_nickname || info.nickname || '',
-          avatarTempPath: this.data.avatarTempPath || info.display_avatar || info.avatar || '',
-          bio: info.bio || '',
-          bioLength: (info.bio || '').length,
-          handedness: info.handedness || this.data.handedness,
-          racket_primary: info.racket_primary || this.data.racket_primary,
-          tags: info.tags || this.data.tags,
-        });
-      }
+    const info = app.globalData.userInfo[0];
+    if (info) {
+      this.setData({
+        mode: info.completed_profile ? 'custom' : this.data.mode,
+        nickname: this.data.nickname || info.display_nickname || info.nickname || '',
+        avatarTempPath: this.data.avatarTempPath || info.display_avatar || info.avatar || '',
+        bio: info.bio || '',
+        bioLength: (info.bio || '').length,
+        handedness: info.handedness || this.data.handedness,
+        racket_primary: info.racket_primary || this.data.racket_primary,
+        tags: info.tags || this.data.tags,
+      });
     }
   },
 
