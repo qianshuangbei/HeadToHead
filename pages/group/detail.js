@@ -14,6 +14,10 @@ Page({
   },
 
   onLoad(options) {
+    const pages = getCurrentPages();
+    const prevPage = pages.length > 1 ? pages[pages.length - 2] : null;
+    this.previousRoute = prevPage ? prevPage.route : '';
+
     this.setData({ groupId: options.groupId });
     this.loadGroupDetail();
     this.loadSeasons();
@@ -234,11 +238,15 @@ Page({
             icon: 'success'
           });
           setTimeout(() => {
-            wx.navigateBack();
+            wx.redirectTo({ url: '/pages/group/list' });
           }, 500);
         }
       }
     });
+  },
+
+  handleBack() {
+    wx.redirectTo({ url: '/pages/group/list' });
   }
 });
 
