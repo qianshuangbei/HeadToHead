@@ -60,13 +60,20 @@ Page({
 
   loadCurrentUser() {
     const app = getApp();
-    this.setData({self_id: app.globalData.openid});
+    const db = wx.cloud.database();
+    const userDoc = db.collection('users').where({ _openid: app.globalData.openid}).get()
+    .then(res =>{
+      this.setData({
+        self_id: app.globalData.openid,
+        currentUser: res.data[0]
+      });
+    });
   },
 
   loadOpponents() {
     api.getGroupMembers(this.data.groupId)
       .then(members => {
-        const opponents = members.filter(m != this.data.self_id);
+        const opponents = members.filter(m => m !== this.data.self_id);
         this.setData({
           opponents: opponents,
           selectedOpponent: opponents.length > 0 ? opponents[0] : null

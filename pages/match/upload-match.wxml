@@ -29,7 +29,7 @@
           <view class="avatar-container">
             <image
               class="avatar"
-              src="{{currentUser && currentUser.avatar ? currentUser.avatar : '/images/default-avatar.png'}}"
+              src="{{currentUser && currentUser.display_avatar ? currentUser.display_avatar : '/images/default-avatar.png'}}"
               mode="aspectFill"
             />
           </view>
