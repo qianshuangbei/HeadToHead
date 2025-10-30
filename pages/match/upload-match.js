@@ -119,15 +119,23 @@ Page({
     this.setData({
       selectedOpponentIndex: index,
       selectedOpponent: this.data.opponents[index]
+    }, () => {
+      // setData 完成后的回调
+      console.log('=== After setData (callback) ===');
+      console.log('selectedOpponent:', JSON.stringify(this.data.selectedOpponent, null, 2));
+      console.log('Has display_avatar?', !!this.data.selectedOpponent.display_avatar);
+      console.log('display_avatar value:', this.data.selectedOpponent.display_avatar);
+      console.log('Has nickname?', !!this.data.selectedOpponent.nickname);
+      console.log('nickname value:', this.data.selectedOpponent.nickname);
     });
 
-    console.log('=== After setData ===');
-    console.log('selectedOpponent:', JSON.stringify(this.data.selectedOpponent, null, 2));
-    console.log('Has display_avatar?', !!this.data.selectedOpponent.display_avatar);
-    console.log('display_avatar value:', this.data.selectedOpponent.display_avatar);
-    console.log('Has nickname?', !!this.data.selectedOpponent.nickname);
-    console.log('nickname value:', this.data.selectedOpponent.nickname);
     console.log('=== onOpponentChange END ===');
+  },
+
+  onImageError(e) {
+    console.error('=== Image Load Error ===');
+    console.error('Failed to load image:', e);
+    console.error('Current selectedOpponent:', this.data.selectedOpponent);
   },
 
   // 双打模式玩家选择

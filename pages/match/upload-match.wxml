@@ -63,8 +63,9 @@
             <view class="avatar-container clickable">
               <image
                 class="avatar"
-                src="{{selectedOpponent && selectedOpponent.display_avatar ? selectedOpponent.display_avatar : '/images/default-avatar.png'}}"
+                src="{{selectedOpponent.display_avatar || '/images/default-avatar.png'}}"
                 mode="aspectFill"
+                binderror="onImageError"
               />
               <view wx:if="{{!selectedOpponent}}" class="avatar-placeholder">
                 <text class="plus-icon">+</text>
