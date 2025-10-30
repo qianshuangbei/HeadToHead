@@ -63,8 +63,7 @@
   <!-- 比赛标签页 -->
   <view class="tab-content" wx:if="{{activeTab === 'matches'}}">
     <view class="action-buttons">
-      <button class="btn btn-primary" bindtap="handleUploadSingles">上传单打</button>
-      <button class="btn btn-primary" bindtap="handleUploadDoubles">上传双打</button>
+      <button class="btn btn-primary" bindtap="handleUploadMatch">上传比分</button>
     </view>
 
     <!-- 待审核比赛 -->
@@ -92,12 +91,6 @@
         </view>
         <text class="status {{item.status}}">{{item.status}}</text>
       </view>
-    </view>
-
-    <!-- 比赛空状态 -->
-    <view class="empty-state" wx:else>
-      <text>暂无比赛</text>
-      <button class="btn-empty" bindtap="handleUploadSingles">上传第一场比赛</button>
     </view>
   </view>
 

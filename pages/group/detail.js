@@ -199,8 +199,8 @@ Page({
       });
   },
 
-  // Upload singles match
-  handleUploadSingles() {
+  // Upload match
+  handleUploadMatch() {
     wx.navigateTo({
       url: `/pages/match/upload-match?groupId=${this.data.groupId}`
     });
