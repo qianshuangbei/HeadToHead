@@ -4,19 +4,46 @@
     <text>加载中...</text>
   </block>
   <block wx:elif="{{user}}">
-    <image wx:if="{{user.display_avatar}}" class="avatar" src="{{user.display_avatar}}" mode="aspectFill" />
-    <text class="nickname">{{user.display_nickname}}</text>
-    <text class="status">{{user.completed_profile ? '资料已完成' : '资料未完成'}}</text>
-    <view class="extra">
-      <text wx:if="{{user.handedness}}">持拍手: {{user.handedness === 'left' ? '左手' : '右手'}}</text>
-      <text wx:if="{{user.racket_primary}}">主力球拍: {{user.racket_primary}}</text>
-      <view class="tags" wx:if="{{user.tags && user.tags.length}}">
-        <block wx:for="{{user.tags}}" wx:key="index">
-          <text class="tag">{{item}}</text>
-        </block>
+    <view class="top-section">
+      <view class="avatar-wrapper">
+        <image wx:if="{{user.display_avatar}}" class="avatar" src="{{user.display_avatar}}" mode="aspectFill" />
+        <view wx:else class="avatar placeholder">
+          <text>{{user.display_nickname.charAt ? user.display_nickname.charAt(0) : '?'}}</text>
+        </view>
+      </view>
+      <view class="stats">
+        <view class="stat">
+          <text class="stat-number">{{user.stats.matches}}</text>
+          <text class="stat-label">比赛</text>
+        </view>
+        <view class="stat">
+          <text class="stat-number">{{user.stats.followers}}</text>
+          <text class="stat-label">粉丝</text>
+        </view>
+        <view class="stat">
+          <text class="stat-number">{{user.stats.following}}</text>
+          <text class="stat-label">关注</text>
+        </view>
       </view>
     </view>
-    <button size="mini" bindtap="goEditProfile">修改资料</button>
+    <view class="action-row">
+      <view class="profile-info">
+        <text class="nickname">{{user.display_nickname}}</text>
+        <text class="status">{{user.completed_profile ? '资料已完成' : '完善资料以展示更好形象'}}</text>
+        <text wx:if="{{user.location}}" class="location">{{user.location}}</text>
+        <text wx:if="{{user.bio}}" class="bio">{{user.bio}}</text>
+      </view>
+      <button class="edit-btn" bindtap="goEditProfile">编辑资料</button>
+    </view>
+    <view class="highlight">
+      <text wx:if="{{user.handedness}}" class="highlight-item">持拍手 · {{user.handedness === 'left' ? '左手' : '右手'}}</text>
+      <text wx:if="{{user.racket_primary}}" class="highlight-item">主力球拍 · {{user.racket_primary}}</text>
+    </view>
+    <view class="tags" wx:if="{{user.tags && user.tags.length}}">
+      <block wx:for="{{user.tags}}" wx:key="index">
+        <text class="tag">#{{item}}</text>
+      </block>
+    </view>
   </block>
   <block wx:else>
     <text>未获取到用户信息</text>
