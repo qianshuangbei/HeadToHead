@@ -32,7 +32,7 @@
         "pagePath": "pages/index/index",
         "iconPath": "assets/icons/tennis.png",
         "selectedIconPath": "assets/icons/tennis_blue.png",
-        "text": "Group"
+        "text": "圈子"
       },
       {
         "pagePath": "pages/challenge/index",
@@ -44,7 +44,7 @@
         "pagePath": "pages/profile/index",
         "iconPath": "assets/icons/tennis.png",
         "selectedIconPath": "assets/icons/tennis_blue.png",
-        "text": "Me"
+        "text": "我的"
       }
     ]
   },

@@ -13,18 +13,9 @@
 <view class="choice-sheet" wx:if="{{showChoiceSheet}}">
   <view class="sheet-content">
     <view class="sheet-title">首次资料设置</view>
-    <button type="primary" bindtap="handleChooseWechatProfile">使用微信头像与昵称</button>
-    <button bindtap="handleChooseCustomProfile">自定义头像与昵称</button>
-    <view wx:if="{{showCustomEditor}}" class="custom-editor">
-      <view class="editor-row">
-        <view class="avatar-box" bindtap="handlePickAvatar">
-          <image wx:if="{{avatarTemp}}" src="{{avatarTemp}}" mode="aspectFill" class="avatar-img" />
-          <view wx:else class="avatar-placeholder">选择头像</view>
-        </view>
-        <input class="nickname-input" placeholder="输入昵称" value="{{nicknameTemp}}" bindinput="handleCustomNicknameInput" />
-      </view>
-      <button type="primary" loading="{{savingCustom}}" bindtap="handleSaveCustomProfile">保存并进入</button>
-    </view>
-    <view class="hint">可选择微信资料或自定义，后续可在“我的”里修改。</view>
+    <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatarUrl}}"></image>
+    </button> 
+    <input type="nickname" class="weui-input" placeholder="请输入昵称" value="{{nickname}}" bindinput="onNicknameInput"/>
   </view>
 </view>

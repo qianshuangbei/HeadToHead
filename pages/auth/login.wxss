@@ -3,7 +3,7 @@ page { background-color: #f5f5f5; }
 .login-prompt {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-height: 100vh; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#fff;
-  padding-top: 8vh; /* 轻微下移内容使文字更居中视觉上 */
+  padding-bottom: 10vh; /* 轻微下移内容使文字更居中视觉上 */
   box-sizing: border-box;
 }
 .login-icon { font-size:80px; margin-bottom:30px; }
@@ -13,10 +13,11 @@ page { background-color: #f5f5f5; }
 .checking { padding:40px; text-align:center; color:#666; }
 .choice-sheet { position:fixed; left:0; right:0; bottom:0; background:#fff; box-shadow:0 -2px 12px rgba(0,0,0,.15); border-top-left-radius:16px; border-top-right-radius:16px; padding:16px; }
 .sheet-content { display:flex; flex-direction:column; align-items:center; gap:12px; }
-.avatar-wrapper { width:64px; height:64px; border-radius:50%; overflow:hidden; padding:0; border:none; background:transparent; }
+.avatar-wrapper { width:64px; height:64px; border-radius:50%; overflow:hidden; padding:0; border:none; background: #4e4e4e; }
 .avatar { width:64px; height:64px; border-radius:50%; }
 .sheet-content button { margin-top:0; }
-.sheet-title { font-size:18px; font-weight:600; margin-bottom:12px; }
+.sheet-title { font-size:14px; font-weight:600; margin-bottom:12px; }
+.weui-input { font-size:14px; font-weight:600; margin-bottom:12px; text-align:center; }
 .hint { font-size:12px; color:#666; margin-top:16px; }
 .custom-editor { margin-top:16px; padding:12px; background:#f7f7f7; border-radius:8px; }
 .editor-row { display:flex; align-items:center; }
