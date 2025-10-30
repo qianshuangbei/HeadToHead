@@ -56,7 +56,7 @@
     - 成员管理
 
 - [x] 比赛管理
-  - 上传单打 (`pages/match/upload-singles.wxml/js`)
+  - 上传比赛 (`pages/match/upload-match.wxml/js`)
   - 比赛审核流程
   - 比赛历史查询
 
@@ -231,7 +231,7 @@ miniprogram/
 │   ├── group/create.js/wxml
 │   ├── group/join.js/wxml
 │   ├── group/detail.js/wxml/wxss
-│   ├── match/upload-singles.js/wxml
+│   ├── match/upload-match.js/wxml
 │   └── ... (其他页面待补充)
 └── utils/
     └── api.js (371行)

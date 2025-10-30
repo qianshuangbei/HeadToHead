@@ -17,8 +17,7 @@ HeadToHead/
 │   │   │   ├── join.wxml          # 加入Group
 │   │   │   └── detail.wxml        # Group详情+排名
 │   │   ├── match/                 # 比赛相关
-│   │   │   ├── upload-singles.wxml
-│   │   │   ├── upload-doubles.wxml
+│   │   │   ├── upload-match.wxml
 │   │   │   ├── review.wxml
 │   │   │   └── history.wxml
 │   │   └── profile/               # 个人页面

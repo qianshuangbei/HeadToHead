@@ -202,14 +202,7 @@ Page({
   // Upload singles match
   handleUploadSingles() {
     wx.navigateTo({
-      url: `/pages/match/upload-singles?groupId=${this.data.groupId}`
-    });
-  },
-
-  // Upload doubles match
-  handleUploadDoubles() {
-    wx.navigateTo({
-      url: `/pages/match/upload-doubles?groupId=${this.data.groupId}`
+      url: `/pages/match/upload-match?groupId=${this.data.groupId}`
     });
   },
 

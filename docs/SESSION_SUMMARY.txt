@@ -209,7 +209,7 @@ P3 (3个月+):
   miniprogram/utils/api.js ..................... API封装 (⭐ 371行)
   miniprogram/pages/index/index.js ............ 首页
   miniprogram/pages/group/detail.js .......... Group详情 (⭐ 包含排名)
-  miniprogram/pages/match/upload-singles.js . 比赛上传
+  miniprogram/pages/match/upload-match.js . 比赛上传
 
 云函数:
   cloudfunctions/login/index.js ................... 登录 (14行)

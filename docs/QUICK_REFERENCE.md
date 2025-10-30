@@ -24,7 +24,7 @@
 | `cloudfunctions/progressSeason/index.js` | 赛季推进 | 150 |
 | `miniprogram/pages/index/index.js` | 首页 | 89 |
 | `miniprogram/pages/group/detail.js` | Group详情+排名 | 120 |
-| `miniprogram/pages/match/upload-singles.js` | 比赛上传 | 135 |
+| `miniprogram/pages/match/upload-match.js` | 比赛上传 | 135 |
 
 ---
 
@@ -232,7 +232,7 @@ db.collection('matches').doc(matchId).update({
 wx.navigateTo({ url: `/pages/group/detail?groupId=${id}` })
 
 // 上传比赛
-wx.navigateTo({ url: `/pages/match/upload-singles?groupId=${id}` })
+wx.navigateTo({ url: `/pages/match/upload-match?groupId=${id}` })
 
 // 返回
 wx.navigateBack()

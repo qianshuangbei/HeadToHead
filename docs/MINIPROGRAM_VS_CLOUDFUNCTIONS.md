@@ -63,7 +63,7 @@ miniprogram/
 
 **代码示例 - 上传比赛**:
 ```javascript
-// miniprogram/pages/match/upload-singles.js
+// miniprogram/pages/match/upload-match.js
 
 // 用户点击"上传比赛"按钮
 handleUpload() {
@@ -139,7 +139,7 @@ exports.main = async (event, context) => {
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ 第一步: 用户在小程序中上传比赛                          │
-│ miniprogram/pages/match/upload-singles.js              │
+│ miniprogram/pages/match/upload-match.js              │
 └─────────────────────────────────────────────────────────┘
            ↓
 ┌─────────────────────────────────────────────────────────┐
@@ -264,7 +264,7 @@ api.getUserOrCreate(openid, userInfo).then(user => {
 ```javascript
 // 1. 显示Group列表 (pages/index/index.js)
 // 2. 显示排名表格 (pages/group/detail.js)
-// 3. 上传比赛表单 (pages/match/upload-singles.js)
+// 3. 上传比赛表单 (pages/match/upload-match.js)
 // 4. 审核比赛 (pages/group/detail.js)
 
 // 都是UI层面的工作
@@ -319,7 +319,7 @@ api.getUserOrCreate(openid, userInfo).then(user => {
 |------|---------------|------------------|----------|
 | 用户登录 | pages/auth/login.js | login/ | users |
 | Group管理 | pages/group/detail.js | (无) | groups, group_members |
-| 比赛上传 | pages/match/upload-singles.js | (无) | matches |
+| 比赛上传 | pages/match/upload-match.js | (无) | matches |
 | 排名计算 | pages/group/detail.js显示 | **updateRankings/** | season_rankings |
 | 赛季推进 | (无，后台) | **progressSeason/** | seasons, season_awards |
 

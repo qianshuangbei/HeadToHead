@@ -125,7 +125,7 @@ i18n.t('loadedItems', { count: 10 });
 | `miniprogram/pages/group/detail.js` | 5 条日志转换为英文 |
 | `miniprogram/pages/group/create.js` | 1 条日志转换为英文 |
 | `miniprogram/pages/group/join.js` | 1 条日志转换为英文 |
-| `miniprogram/pages/match/upload-singles.js` | 3 条日志转换为英文 |
+| `miniprogram/pages/match/upload-match.js` | 3 条日志转换为英文 |
 | 所有文件 | 代码注释转换为英文 |
 
 ### 新增文件
@@ -175,7 +175,7 @@ i18n.t('loadedItems', { count: 10 });
 - `miniprogram/pages/group/detail.js` - 4 个 toast
 - `miniprogram/pages/group/create.js` - 2 个 toast
 - `miniprogram/pages/group/join.js` - 2 个 toast
-- `miniprogram/pages/match/upload-singles.js` - 3 个 toast
+- `miniprogram/pages/match/upload-match.js` - 3 个 toast
 
 ### 第 2 阶段: 更新模态框
 - `miniprogram/pages/group/detail.js` - 群组退出确认框

@@ -217,7 +217,7 @@ Update these files to use `i18n.t()` instead of hardcoded strings:
 - `miniprogram/pages/group/detail.js` - 4 toasts
 - `miniprogram/pages/group/create.js` - 2 toasts
 - `miniprogram/pages/group/join.js` - 2 toasts
-- `miniprogram/pages/match/upload-singles.js` - 3 toasts
+- `miniprogram/pages/match/upload-match.js` - 3 toasts
 
 ### Phase 2: Update Modal Dialogs
 - `miniprogram/pages/group/detail.js` - Leave group confirmation modal

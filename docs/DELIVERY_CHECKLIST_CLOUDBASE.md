@@ -36,10 +36,8 @@ miniprogram/
 │   │   └── detail.wxss            ✅ 页面样式
 │   │
 │   ├── match/
-│   │   ├── upload-singles.js      ✅ 135行 - 单打上传
-│   │   ├── upload-singles.wxml    ✅ 页面结构
-│   │   ├── upload-doubles.js      ⏳ 待实现
-│   │   └── upload-doubles.wxml    ⏳ 待实现
+│   │   ├── upload-match.js      ✅ 135行 - 比赛上传
+│   │   └── upload-match.wxml    ✅ 页面结构
 │   │
 │   └── profile/                    ⏳ 个人页面 (待实现)
 │
