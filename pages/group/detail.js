@@ -11,6 +11,7 @@ Page({
     currentSeasonIndex: 0,
     pendingMatches: [],
     recentMatches: [],
+    members: []
   },
 
   onLoad(options) {
@@ -23,11 +24,13 @@ Page({
     this.loadSeasons();
     this.loadRankings();
     this.loadMatches();
+    this.loadMembers();
   },
 
   onShow() {
     this.loadGroupDetail();
     this.loadMatches();
+    this.loadMembers();
   },
 
   // Load group details
@@ -130,6 +133,41 @@ Page({
       })
       .catch(err => {
         console.error('Failed to load recent matches:', err);
+      });
+  },
+
+  // Load members
+  loadMembers() {
+    const db = api.initCloudBase();
+    const creatorId = this.data.group.creator_id;
+
+    db.collection('group_members')
+      .where({ group_id: this.data.groupId })
+      .get()
+      .then(res => {
+        const memberIds = res.data.map(m => m.user_id);
+
+        // Fetch user details
+        return db.collection('users')
+          .where({ _openid: db.command.in(memberIds) })
+          .get()
+          .then(userRes => {
+            // Extract only display_avatar and nickname, and mark creator
+            const members = userRes.data.map(user => ({
+              display_avatar: user.display_avatar,
+              nickname: user.nickname,
+              _openid: user._openid,
+              isCreator: user._openid === creatorId
+            }));
+            this.setData({ members });
+          });
+      })
+      .catch(err => {
+        console.error('Failed to load members:', err);
+        wx.showToast({
+          title: '加载成员失败',
+          icon: 'error'
+        });
       });
   },
 
