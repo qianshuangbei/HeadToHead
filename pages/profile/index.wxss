@@ -128,6 +128,7 @@ page {
   display: flex;
   flex-wrap: wrap;
   gap: 20rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: rgba(255, 255, 255, 0.8);
 }
 
