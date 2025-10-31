@@ -31,6 +31,7 @@ Page({
   },
 
   onShow() {
+    this.loadGroupDetail();
     this.loadSeasons();
     this.loadMatches();
     this.loadMembers();
@@ -55,9 +56,13 @@ Page({
   loadSeasons() {
     api.getGroupSeasons(this.data.groupId)
       .then(seasons => {
+        // 找出 status 为 'active' 的 season 索引
+        const activeIndex = seasons.findIndex(s => s.status === 'active');
+        const currentSeasonIndex = activeIndex >= 0 ? activeIndex : 0;
+
         this.setData({
           seasons,
-          currentSeasonIndex: 0
+          currentSeasonIndex
         });
         if (seasons.length > 0) {
           this.loadRankings();

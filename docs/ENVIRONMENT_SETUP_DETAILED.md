@@ -55,7 +55,8 @@
 ```
 名称: groups
 字段:
-  _id: Group ID
+  _id: 自动生成
+  group_id: Group ID (UUID业务主键)
   name: Group名称
   description: 描述
   creator_id: 创建者ID
@@ -66,14 +67,14 @@
   created_at: 创建时间
   updated_at: 更新时间
 
-索引: access_code, creator_id, created_at
+索引: group_id, access_code, creator_id, created_at
 ```
 
 #### 集合3: `group_members`
 ```
 名称: group_members
 字段:
-  _id: 记录ID
+  _id: 自动生成
   group_id: Group ID
   user_id: 用户ID
   joined_at: 加入时间
@@ -87,7 +88,8 @@
 ```
 名称: seasons
 字段:
-  _id: 赛季ID
+  _id: 自动生成
+  season_id: 赛季ID (UUID业务主键)
   group_id: Group ID
   season_name: 赛季名称
   status: 状态 (pending/active/ended/settled)
@@ -99,14 +101,14 @@
   created_at: 创建时间
   updated_at: 更新时间
 
-索引: group_id, status, start_date, end_date
+索引: season_id, group_id, status, start_date, end_date
 ```
 
 #### 集合5: `matches`
 ```
 名称: matches
 字段:
-  _id: 比赛ID
+  _id: 自动生成
   match_type: 类型 (singles/doubles)
   group_id: Group ID
   season_id: 赛季ID
@@ -115,6 +117,7 @@
   team_a: {player1, player2} (双打)
   team_b: {player1, player2} (双打)
   score: {set1, set2, set3}
+  format: 比赛形式 (6_games/4_games/tb7/tb10/tb11)
   winning_player_id: 赢家ID (单打)
   winning_team: 赢队伍 (双打: team_a/team_b)
   status: 状态 (pending/approved/rejected)
@@ -131,7 +134,7 @@
 ```
 名称: season_rankings
 字段:
-  _id: 排名记录ID
+  _id: 自动生成
   season_id: 赛季ID
   user_id: 用户ID
   rank: 排名
@@ -149,7 +152,7 @@
 ```
 名称: season_awards
 字段:
-  _id: 奖项ID
+  _id: 自动生成
   season_id: 赛季ID
   award_type: 奖项类型
     (mvp / best_record / most_active / fastest_progress)

@@ -18,18 +18,53 @@ Page({
 
   onLoad(options) {
     const app = getApp();
-    const info = app.globalData.userInfo[0];
-    if (info) {
+    // 缓存 openid 和 app 引用，避免多次调用 getApp()
+    this.app = app;
+    this.openid = app.globalData.openid;
+
+    // Stale-While-Revalidate 策略：先使用缓存快速显示，然后从数据库获取最新数据
+    this.loadUserInfo();
+  },
+
+  async loadUserInfo() {
+    // 1. 先尝试使用缓存数据（快速首屏）
+    const cached = wx.getStorageSync('cachedUserInfo');
+    if (cached) {
       this.setData({
-        mode: info.completed_profile ? 'custom' : this.data.mode,
-        nickname: this.data.nickname || info.display_nickname || info.nickname || '',
-        avatarTempPath: this.data.avatarTempPath || info.display_avatar || info.avatar || '',
-        bio: info.bio || '',
-        bioLength: (info.bio || '').length,
-        handedness: info.handedness || this.data.handedness,
-        racket_primary: info.racket_primary || this.data.racket_primary,
-        tags: info.tags || this.data.tags,
+        mode: cached.completed_profile ? 'custom' : this.data.mode,
+        nickname: cached.display_nickname || cached.nickname || '',
+        avatarTempPath: cached.display_avatar || cached.avatar || '',
+        bio: cached.bio || '',
+        bioLength: (cached.bio || '').length,
+        handedness: cached.handedness || '',
+        racket_primary: cached.racket_primary || '',
+        tags: cached.tags || [],
       });
+    }
+
+    // 2. 从数据库获取最新数据
+    if (this.openid) {
+      try {
+        const db = wx.cloud.database();
+        const res = await db.collection('users').where({ _openid: this.openid }).get();
+        if (res.data && res.data.length > 0) {
+          const info = res.data[0];
+          this.setData({
+            mode: info.completed_profile ? 'custom' : this.data.mode,
+            nickname: info.display_nickname || info.nickname || '',
+            avatarTempPath: info.display_avatar || info.avatar || '',
+            bio: info.bio || '',
+            bioLength: (info.bio || '').length,
+            handedness: info.handedness || '',
+            racket_primary: info.racket_primary || '',
+            tags: info.tags || [],
+          });
+          // 更新缓存
+          wx.setStorageSync('cachedUserInfo', info);
+        }
+      } catch (e) {
+        console.error('Load user info error:', e);
+      }
     }
   },
 
@@ -128,9 +163,8 @@ Page({
     console.log('Uploading file to cloud storage...');
     this.setData({ uploading: true });
     try {
-      const openid = getApp().globalData.openid;
       const ext = this.data.avatarTempPath.split('.').pop();
-      const cloudPath = `avatars/${openid}_${Date.now()}.${ext}`;
+      const cloudPath = `avatars/${this.openid}_${Date.now()}.${ext}`;
       const res = await wx.cloud.uploadFile({
         cloudPath,
         filePath: this.data.avatarTempPath,
@@ -153,12 +187,10 @@ Page({
       return;
     }
     this.setData({ saving: true, error: '' });
-    const app = getApp();
-    const openid = app.globalData.openid;
     const db = wx.cloud.database();
     try {
       const displayAvatar = await this.uploadAvatarIfNeeded();
-      await db.collection('users').where({ _openid: openid}).update({
+      await db.collection('users').where({ _openid: this.openid}).update({
         data:{
           display_nickname: this.data.nickname,
           display_avatar: displayAvatar,
@@ -170,8 +202,8 @@ Page({
           updated_at: Date.now(),
         }
       });
-      app.globalData.userInfo = {
-        ...app.globalData.userInfo,
+      this.app.globalData.userInfo = {
+        ...this.app.globalData.userInfo,
         display_nickname: this.data.nickname,
         display_avatar: displayAvatar,
         bio: this.data.bio,

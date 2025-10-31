@@ -2,9 +2,14 @@
 <view class="container">
   <!-- Group信息头 -->
   <view class="group-header">
-    <view class="group-title">
-      <text class="name">{{group.name}}</text>
-      <text class="member-count">{{group.member_count}}个成员</text>
+    <view class="header-top">
+      <view class="group-title">
+        <text class="name">{{group.name}}</text>
+        <text class="member-count">{{group.member_count}}个成员</text>
+      </view>
+      <button class="btn-leave-icon" bindtap="handleLeaveGroup">
+        <text class="icon-exit">👉🚪</text>
+      </button>
     </view>
     <view class="share-code">
       <text>分享码: {{group.access_code}}</text>
@@ -110,6 +115,5 @@
   <!-- 底部操作按钮 -->
   <view class="bottom-actions">
     <button class="btn btn-primary" wx:if="{{group.creator_id == openid}}" bindtap="handleCreateSeason">创建新赛季</button>
-    <button class="btn btn-danger" bindtap="handleLeaveGroup">退出Group</button>
   </view>
 </view>

@@ -30,7 +30,8 @@
 ### 2. groups - Group集合
 ```json
 {
-  "_id": "string (uuid)",
+  "_id": "string (自动生成)",
+  "group_id": "string (uuid - 业务主键)",
   "name": "string",
   "description": "string",
   "creator_id": "string",
@@ -48,14 +49,14 @@
 }
 ```
 
-**索引**: `access_code`, `creator_id`, `created_at`
+**索引**: `group_id`, `access_code`, `creator_id`, `created_at`
 
 ---
 
 ### 3. group_members - Group成员集合
 ```json
 {
-  "_id": "string (uuid)",
+  "_id": "string (自动生成)",
   "group_id": "string",
   "user_id": "string",
   "joined_at": "number",
@@ -71,7 +72,8 @@
 ### 4. seasons - 赛季集合
 ```json
 {
-  "_id": "string (uuid)",
+  "_id": "string (自动生成)",
+  "season_id": "string (uuid - 业务主键)",
   "group_id": "string",
   "season_name": "string",
   "status": "string (pending|active|ended|settled)",
@@ -85,14 +87,14 @@
 }
 ```
 
-**索引**: `group_id`, `status`, `start_date`, `end_date`
+**索引**: `season_id`, `group_id`, `status`, `start_date`, `end_date`
 
 ---
 
 ### 5. matches - 比赛集合
 ```json
 {
-  "_id": "string (uuid)",
+  "_id": "string (自动生成)",
   "match_type": "string (singles|doubles)",
   "group_id": "string",
   "season_id": "string",
@@ -117,6 +119,7 @@
     "set3": {"player_a": 0, "player_b": 0}
   },
 
+  "format": "string (比赛形式: 6_games|4_games|tb7|tb10|tb11)",
   "winning_player_id": "string (单打)",
   "winning_team": "string (双打: team_a|team_b)",
 

@@ -13,12 +13,20 @@ page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 20px 16px;
+  position: relative;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
 }
 
 .group-title {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  flex: 1;
 }
 
 .name {
@@ -30,6 +38,31 @@ page {
 .member-count {
   font-size: 14px;
   opacity: 0.9;
+}
+
+.btn-leave-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.btn-leave-icon:active {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+}
+
+.icon-exit {
+  font-size: 20px;
+  line-height: 1;
 }
 
 .share-code {
