@@ -322,12 +322,6 @@ const approveSinglesMatch = async (matchId, approverId, approved) => {
     throw new Error('比赛已审核');
   }
 
-  // 检查审核人是否是对手
-  const opponent = match.data.player_a_id === approverId ? match.data.player_b_id : match.data.player_a_id;
-  if (approverId !== opponent) {
-    throw new Error('只有对手才能审核');
-  }
-
   await updateDoc('matches', matchId, {
       status: approved ? 'approved' : 'rejected',
       approved_by: approverId,
@@ -345,7 +339,6 @@ const getPendingMatches = async (userId, groupId) => {
     .where({
       group_id: groupId,
       status: 'pending',
-      match_type: 'singles',
       player_b_id: userId, // 作为被审核人
     })
     .orderBy('created_at', 'desc')

@@ -85,7 +85,7 @@ App({
           // 根据是否完成 profile 跳转
           const completed = self.globalData.userInfo.completed_profile;
           if (self.globalData.firstLogin) {
-            wx.reLaunch({ url: '/pages/auth/login' });
+            wx.reLaunch({ url: '/pages/auth/login?showLoginPrompt=true' });
           } else {
             wx.switchTab({ url: '/pages/group/list' });
           }

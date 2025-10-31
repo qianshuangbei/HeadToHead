@@ -11,30 +11,20 @@ Page({
     nickName: '',
     submitting: false
   },
-  onShow() {
-    this.checkUser();
+  onLoad(options) {
+    // 直接使用从 app.js 传递过来的参数
+    if (options.showLoginPrompt === 'true') {
+      this.setData({ showLoginPrompt: true, checking: false });
+    }
   },
+  
+  onShow() {
+  },
+
   onUnload() {
     if (this._openidTimer) clearInterval(this._openidTimer);
   },
-  waitForOpenid() {
-    const app = getApp();
-    let attempts = 0;
-    this.setData({ checking: true, showLoginPrompt: false });
-    this._openidTimer = setInterval(() => {
-      attempts++;
-      if (app.globalData.openid) {
-        clearInterval(this._openidTimer);
-        this._openidTimer = null;
-        this.checkUser();
-      } else if (attempts >= 50) { // ~10秒超时
-        clearInterval(this._openidTimer);
-        this._openidTimer = null;
-        // 超时仍未获得 openid，显示登录按钮用于手动触发流程（需保证后续能获取 openid）
-        this.setData({ checking: false, showLoginPrompt: true });
-      }
-    }, 200);
-  },
+
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail 
     var submitting = this.data.nickName != '';
@@ -44,12 +34,14 @@ Page({
     })
     this.onSwitch();
   },
+
   onNicknameInput(e){
     this.setData({nickName: e.detail.value});
     var submitting = this.data.avatarUrl != '';
     this.setData({submitting: submitting});
     this.onSwitch();
   },
+
   async onSwitch(){
     const app = getApp();
     if(this.data.submitting){
@@ -96,35 +88,7 @@ Page({
       }
     }
   },
-  async checkUser() {
-    const app = getApp();
-    const openid = app.globalData.openid;
-    if (!openid) {
-      this.waitForOpenid();
-      return;
-    }
-    try {
-      const res = await db.collection('users').where({ _openid: openid }).get();
-      if (res && res.data && res.data.length > 0) {
-        const userDoc = res.data[0];
-        // 仅在已完成资料时自动跳转首页，避免自定义头像阶段被跳走
-        if (userDoc.completed_profile) {
-          wx.switchTab({ url: '/pages/index/index' });
-          return;
-        }
-        // 否则显示选择浮层
-        this.setData({ showChoiceSheet: true });
-        return;
-      }
-      // 无用户记录，显示登录按钮
-      this.setData({ showLoginPrompt: true });
-    } catch (e) {
-      console.error('checkUser error', e);
-      this.setData({ showLoginPrompt: true });
-    } finally {
-      this.setData({ checking: false });
-    }
-  },
+
   handleLogin() {
     wx.getUserProfile({
       desc: '获取头像和昵称',
