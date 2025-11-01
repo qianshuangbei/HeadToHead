@@ -137,7 +137,20 @@ Page({
       .limit(10)
       .get()
       .then(res => {
-        this.setData({ recentMatches: res.data });
+        var matches = res.data;
+        const opponentIds = matches.map(m => m.player_a_id);
+        db.collection('users')
+          .where({ _openid: db.command.in(opponentIds) })
+          .get()
+          .then(res => {
+            const users = res.data;
+            const matchesWithNames = matches.map(m => ({
+              ...m,
+              player_a_name: users.find(u => u._openid === m.player_a_id)?.nickname || 'Unknown Player',
+              player_b_name: users.find(u => u._openid === m.player_b_id)?.nickname || 'Unknown Player'
+            }));
+            this.setData({ recentMatches: matchesWithNames });
+          });
       })
       .catch(err => {
         console.error('Failed to load recent matches:', err);
