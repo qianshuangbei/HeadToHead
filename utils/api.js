@@ -30,6 +30,12 @@ const updateDoc = async (collectionName, docId, partial) => {
   return db.collection(collectionName).where({ _openid: docId}).update({ data: partial });
 };
 
+// 通过 _id 更新文档
+const updateDocById = async (collectionName, docId, partial) => {
+  const db = initCloudBase();
+  return db.collection(collectionName).where({ _id: docId }).update({ data: partial });
+};
+
 // 使用外部 buildUser / buildGroup (见 models.js)
 
 // 获取或创建用户
@@ -348,7 +354,7 @@ const approveSinglesMatch = async (matchId, approverId, approved) => {
     throw new Error('比赛已审核');
   }
 
-  await updateDoc('matches', matchId, {
+  await updateDocById('matches', matchId, {
       status: approved ? 'approved' : 'rejected',
       approved_by: approverId,
       approved_at: Date.now(),

@@ -23,7 +23,7 @@ App({
   initializeLanguage: function() {
     try {
       const i18n = require('./utils/i18n.js');
-      const systemInfo = wx.getSystemSettings();
+      const systemInfo = wx.getSystemSetting();
 
       // Force default language to Chinese regardless of system setting (plugin removed)
       const selectedLanguage = 'zh';
