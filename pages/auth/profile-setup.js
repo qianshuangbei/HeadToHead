@@ -121,13 +121,76 @@ Page({
   selectAvatar() {
     wx.chooseImage({
       count: 1,
-      sizeType: ['compressed'],
+      sizeType: ['original'], // 先选择原图，稍后自己压缩
       sourceType: ['album', 'camera'],
       success: (res) => {
         const path = res.tempFilePaths[0];
-        this.setData({ avatarTempPath: path });
+        // 压缩图片后再保存
+        this.compressAvatar(path);
       }
     });
+  },
+
+  async compressAvatar(filePath) {
+    try {
+      // 获取图片信息
+      const info = await wx.getImageInfo({ src: filePath });
+      console.log('Original image size:', info.width, 'x', info.height);
+
+      // 计算压缩后的尺寸（最大 800x800，保持宽高比）
+      const maxSize = 800;
+      let targetWidth = info.width;
+      let targetHeight = info.height;
+
+      if (info.width > maxSize || info.height > maxSize) {
+        if (info.width > info.height) {
+          targetWidth = maxSize;
+          targetHeight = Math.round((info.height / info.width) * maxSize);
+        } else {
+          targetHeight = maxSize;
+          targetWidth = Math.round((info.width / info.height) * maxSize);
+        }
+      }
+
+      console.log('Target image size:', targetWidth, 'x', targetHeight);
+
+      // 使用 canvas 压缩图片
+      const canvas = wx.createOffscreenCanvas({
+        type: '2d',
+        width: targetWidth,
+        height: targetHeight
+      });
+
+      const ctx = canvas.getContext('2d');
+
+      // 创建 Image 对象
+      const img = canvas.createImage();
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = filePath;
+      });
+
+      // 绘制并压缩
+      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+      // 导出为临时文件（quality 0.8 = 80% 质量）
+      const compressedPath = canvas.toTempFilePathSync({
+        fileType: 'jpg',
+        quality: 0.8,
+        destWidth: targetWidth,
+        destHeight: targetHeight
+      });
+
+      console.log('Compressed image saved to:', compressedPath);
+      this.setData({ avatarTempPath: compressedPath });
+    } catch (e) {
+      console.error('Image compression failed:', e);
+      // 压缩失败，使用原图
+      wx.showToast({ title: '图片压缩失败，使用原图', icon: 'none' });
+      this.setData({ avatarTempPath: filePath });
+    }
   },
 
   validateNickname(name) {

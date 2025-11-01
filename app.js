@@ -23,7 +23,7 @@ App({
   initializeLanguage: function() {
     try {
       const i18n = require('./utils/i18n.js');
-      const systemInfo = wx.getSystemInfoSync();
+      const systemInfo = wx.getSystemSettings();
 
       // Force default language to Chinese regardless of system setting (plugin removed)
       const selectedLanguage = 'zh';
@@ -52,7 +52,7 @@ App({
         try {
           const db = wx.cloud.database();
           const userDoc = await db.collection('users').where({ _openid: res.result.openid}).get();
-          if (userDoc.data) {
+          if (userDoc.data.length > 0) {
             self.globalData.firstLogin = false;
             await db.collection('users').where({ _openid: res.result.openid}).update({
               data:{
@@ -65,7 +65,6 @@ App({
             // 创建占位用户（不获取微信信息，只保存 ID，留待 profile-setup）
             const now = Date.now();
             const placeholder = {
-              _id: res.result.openid,
               nickname: '',
               avatar: '',
               display_nickname: '',
@@ -78,7 +77,7 @@ App({
               created_at: now,
               updated_at: now,
             };
-            await db.collection('users').where({ _openid: res.result.openid}).set(placeholder);
+            await db.collection('users').add({ data: placeholder });
             self.globalData.userInfo = placeholder;
           }
 
@@ -87,7 +86,7 @@ App({
           if (self.globalData.firstLogin) {
             wx.reLaunch({ url: '/pages/auth/login?showLoginPrompt=true' });
           } else {
-            wx.switchTab({ url: '/pages/group/list' });
+            wx.switchTab({ url: '/pages/index/index' });
           }
         } catch (e) {
           console.error('[Login Flow] User document handling failed', e);

@@ -58,16 +58,34 @@ Page({
     this.setData({ matchDate: dateStr });
   },
 
-  loadCurrentUser() {
+  async loadCurrentUser() {
     const app = getApp();
     const db = wx.cloud.database();
-    const userDoc = db.collection('users').where({ _openid: app.globalData.openid}).get()
-    .then(res =>{
+    try {
+      const res = await db.collection('users').where({ _openid: app.globalData.openid}).get();
+      const user = res.data[0];
+
+      // 如果是 cloud:// fileID，转换为临时 URL
+      if (user && user.display_avatar && user.display_avatar.startsWith('cloud://')) {
+        try {
+          const urlRes = await wx.cloud.getTempFileURL({
+            fileList: [user.display_avatar],
+          });
+          if (urlRes.fileList && urlRes.fileList[0] && urlRes.fileList[0].tempFileURL) {
+            user.display_avatar = urlRes.fileList[0].tempFileURL;
+          }
+        } catch (e) {
+          console.error('Failed to convert current user avatar URL:', e);
+        }
+      }
+
       this.setData({
         self_id: app.globalData.openid,
-        currentUser: res.data[0]
+        currentUser: user
       });
-    });
+    } catch (err) {
+      console.error('Failed to load current user:', err);
+    }
   },
 
   loadOpponents() {

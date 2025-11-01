@@ -8,7 +8,7 @@
         <text class="member-count">{{group.member_count}}个成员</text>
       </view>
       <button class="btn-leave-icon" bindtap="handleLeaveGroup">
-        <text class="icon-exit">👉🚪</text>
+        <text class="icon-exit">🚪</text>
       </button>
     </view>
     <view class="share-code">

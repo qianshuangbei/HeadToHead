@@ -145,38 +145,29 @@ Page({
   },
 
   // Load members
-  loadMembers() {
-    const db = api.initCloudBase();
+  async loadMembers() {
     const creatorId = this.data.group.creator_id;
 
-    db.collection('group_members')
-      .where({ group_id: this.data.groupId })
-      .get()
-      .then(res => {
-        const memberIds = res.data.map(m => m.user_id);
+    try {
+      // 使用 API 函数，它会自动转换头像 URL
+      const membersData = await api.getGroupMembers(this.data.groupId);
 
-        // Fetch user details
-        return db.collection('users')
-          .where({ _openid: db.command.in(memberIds) })
-          .get()
-          .then(userRes => {
-            // Extract only display_avatar and nickname, and mark creator
-            const members = userRes.data.map(user => ({
-              display_avatar: user.display_avatar,
-              nickname: user.nickname,
-              _openid: user._openid,
-              isCreator: user._openid === creatorId
-            }));
-            this.setData({ members });
-          });
-      })
-      .catch(err => {
-        console.error('Failed to load members:', err);
-        wx.showToast({
-          title: '加载成员失败',
-          icon: 'error'
-        });
+      // 标记创建者
+      const members = membersData.map(member => ({
+        display_avatar: member.display_avatar,
+        nickname: member.nickname,
+        _openid: member.openid,
+        isCreator: member.openid === creatorId
+      }));
+
+      this.setData({ members });
+    } catch (err) {
+      console.error('Failed to load members:', err);
+      wx.showToast({
+        title: '加载成员失败',
+        icon: 'error'
       });
+    }
   },
 
   // Switch tabs

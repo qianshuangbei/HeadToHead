@@ -200,11 +200,21 @@ const getGroupMembers = async (groupId) => {
     })
     .get();
 
+  // 收集所有需要转换的 cloud:// fileID
+  const fileIDs = users.data
+    .map(user => user.display_avatar)
+    .filter(avatar => avatar && avatar.startsWith('cloud://'));
+
+  // 批量转换为临时 URL
+  const urlMap = await convertFileIDsToUrls(fileIDs);
+
   // 返回包含 openid, display_avatar, nickname 的用户信息
   return users.data.map(user => ({
     user_id: user._openid,
     openid: user._openid,
-    display_avatar: user.display_avatar,
+    display_avatar: user.display_avatar && user.display_avatar.startsWith('cloud://')
+      ? (urlMap[user.display_avatar] || user.display_avatar)
+      : user.display_avatar,
     nickname: user.nickname
   }));
 }
@@ -235,11 +245,27 @@ const getGroupDetail = async (groupId) => {
     })
     .get();
 
+  // 收集所有需要转换的 cloud:// fileID
+  const fileIDs = usersResult.data
+    .map(user => user.display_avatar)
+    .filter(avatar => avatar && avatar.startsWith('cloud://'));
+
+  // 批量转换为临时 URL
+  const urlMap = await convertFileIDsToUrls(fileIDs);
+
+  // 转换用户头像 URL
+  const usersWithUrls = usersResult.data.map(user => ({
+    ...user,
+    display_avatar: user.display_avatar && user.display_avatar.startsWith('cloud://')
+      ? (urlMap[user.display_avatar] || user.display_avatar)
+      : user.display_avatar
+  }));
+
   return {
     ...group.data,
     members: members.data.map(m => ({
       ...m,
-      userInfo: usersResult.data.find(u => u._id === m.user_id) || {}
+      userInfo: usersWithUrls.find(u => u._openid === m.user_id) || {}
     }))
   };
 };
@@ -383,6 +409,33 @@ const getCurrentRanking = async (groupId) => {
   }
 
   return [];
+};
+
+/**
+ * ==================== 云存储相关 ====================
+ */
+
+// 将 cloud:// fileID 转换为临时访问 URL
+const convertFileIDsToUrls = async (fileIDs) => {
+  if (!fileIDs || fileIDs.length === 0) return {};
+
+  try {
+    const res = await wx.cloud.getTempFileURL({
+      fileList: fileIDs,
+    });
+
+    // 返回 fileID -> tempFileURL 的映射
+    const urlMap = {};
+    res.fileList.forEach(file => {
+      if (file.tempFileURL) {
+        urlMap[file.fileID] = file.tempFileURL;
+      }
+    });
+    return urlMap;
+  } catch (e) {
+    console.error('Convert fileIDs to URLs failed:', e);
+    return {};
+  }
 };
 
 /**
